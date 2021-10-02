@@ -1,0 +1,98 @@
+.mycard-container {
+
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 25px;
+    width: 25%;
+    padding-bottom: 5px;
+    overflow: hidden;
+    box-shadow: 0px 0px 15px -5px;
+    transition: 0.1s;
+    animation: ease-in-out;
+
+    border-radius: 5px;
+}
+
+.mycard-container:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px 0px;
+}
+
+.mycard-image-container {
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    margin-top: 5%;
+
+    padding: 5%;
+
+    /* height: 300px; */
+    overflow: hidden;
+}
+
+.mycard-img {
+    object-fit: fill;
+
+    border-radius: 4px;
+}
+
+.mycard-title {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+
+    height: fit-content;
+
+    font-size: 2em;
+    color: red;
+}
+
+.mycard-body {
+    margin: 0rem 1rem 0rem 1rem;
+    /* margin-top: 0rem; */
+
+    color: gray;
+
+    text-align: justify;
+}
+
+.mycard-lower {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+
+    margin-bottom: 5%;
+}
+
+.mycard-btn-view {
+    color: red;
+    border-color: red;
+    border-radius: 5px;
+    border-style: solid;
+
+    font-size: 1.5em;
+    font-weight: 300;
+}
+
+.mycard-button-cart {}
+
+@media (max-width: 1000px) {
+    .mycard-container {
+
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 25px;
+        width: 90%;
+        padding-bottom: 5px;
+        overflow: hidden;
+        box-shadow: 0px 0px 15px -5px;
+        transition: 0.1s;
+        animation: ease-in-out;
+
+        border-radius: 5px;
+    }
+}
