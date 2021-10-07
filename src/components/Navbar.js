@@ -59,8 +59,8 @@ const NavItems = ({ openCallback }) => {
         openCallback && openCallback(false);
       }}
     >
-      <NavItem text="Home" route="/" />
-      <NavItem text="One" route="/about" />
+      <NavItem text="Records" route="/" />
+      <NavItem text="Dashboard" route="/dashboard" />
       <NavItem text="Two" route="/services" />
 
       <NavItem text="Three" route="/products">

@@ -1,16 +1,19 @@
+import { Margin } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 
 import { getRecords } from "../api";
 
 import "../styles/home.css";
 
-export const Home = () => {
+export const Records = () => {
   const [rows, setRows] = useState([]);
 
-  const loadRecords = () => {
-    getRecords().then((data) => {
+  const [offset, setOffset] = useState(0);
+
+  const loadRecords = ({ pOffset }) => {
+    getRecords({ offset: pOffset }).then((data) => {
       console.log("data: ", data);
-      if (data.error) {
+      if (!data || data.error) {
         console.log(data.error);
       } else {
         console.log("on home : ", data);
@@ -21,14 +24,46 @@ export const Home = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadRecords();
-  }, []);
+    loadRecords({ pOffset: offset });
+  }, [offset]);
+
+  const nextRecords = () => {
+    setOffset(offset + 25);
+  };
+
+  const prevRecords = () => {
+    if (offset < 25) return;
+    setOffset(offset - 25);
+  };
 
   return (
     <div>
-      <p>Fetched Records ..</p>
+      <div className="next-prev" style={{ margin: "10px" }}>
+        <button className="prev-btn" onClick={prevRecords}>
+          Previous
+        </button>
+        <div className="records-heading">
+          <h2>Fetched Records ..</h2>
+        </div>
+        <button className="next-btn" onClick={nextRecords}>
+          Next
+        </button>
+      </div>
+
       <div>
         <table className="record-table">
+          <tr className="table-heading">
+            <th>TaskName</th>
+            <th>JobCode</th>
+            <th>User</th>
+            <th>Company</th>
+            <th>Database</th>
+            <th>DataInstance</th>
+            <th>ExecutedOn</th>
+            <th>TerminatedOn</th>
+            <th>ExecutionType</th>
+            <th>MailSent</th>
+          </tr>
           {rows.map((row, i) => {
             return (
               <tr>
@@ -46,6 +81,14 @@ export const Home = () => {
             );
           })}
         </table>
+        <div className="next-prev">
+          <button className="prev-btn" onClick={prevRecords}>
+            Previous
+          </button>
+          <button className="next-btn" onClick={nextRecords}>
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

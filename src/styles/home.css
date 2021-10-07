@@ -1,10 +1,58 @@
+.records-heading {
+  display: flex;
+  justify-content: center;
+}
+
+.table-heading {
+  border: 1px solid black;
+}
+
+.table-heading th {
+  border: 1px solid black;
+}
+
 .record-table {
   border: 1px solid black;
-  width: 100%;
+  width: 98%;
+
+  margin: 10px;
 }
 
 .record-table td {
   border: 1px solid black;
+}
+
+.next-prev {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-around;
+}
+
+.prev-btn {
+  color: white;
+  background-color: red;
+  border-color: red;
+  border-radius: 1px;
+  border-style: solid;
+
+  padding: 5px;
+
+  font-size: 1em;
+  font-weight: 300;
+}
+
+.next-btn {
+  color: white;
+  background-color: red;
+  border-color: red;
+  border-radius: 1px;
+  border-style: solid;
+
+  padding: 5px;
+
+  font-size: 1em;
+  font-weight: 300;
 }
 
 .image-grid {
