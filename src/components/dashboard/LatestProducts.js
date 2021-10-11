@@ -50,10 +50,7 @@ const products = [
 
 const LatestProducts = (props) => (
   <Card {...props}>
-    <CardHeader
-      subtitle={`${products.length} in total`}
-      title="Latest Products"
-    />
+    <CardHeader subtitle={`${products.length} in total`} title="Selection" />
     <Divider />
     <List>
       {products.map((product, i) => (
