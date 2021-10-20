@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
-import { updateJobStatus, getFilteredRecords } from "../api";
+import { archiveJobs, getFilteredArchiveRecords } from "../api";
 
 import "../styles/home.css";
 
-export const Records = () => {
+export const Archives = () => {
   const [rows, setRows] = useState([]);
 
   const [offset, setOffset] = useState(0);
@@ -14,37 +14,20 @@ export const Records = () => {
     customer: "",
     company: "",
     queryConditions: "",
-    updateMessage: "",
   });
 
-  const [updateOpen, setUpdateOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
-
-  const [jobKeyState, setJobKeyState] = useState(-1);
-  const [jobStatus, setJobStatus] = useState("Pending");
 
   const [message, setMessage] = useState("");
 
-  const { jobCode, customer, company, queryConditions, updateMessage } =
-    filters;
+  const [date, setDate] = useState("1999-01-01");
 
-  // const loadRecords = ({ pOffset }) => {
-  //   console.log(`called load records at ${Date.now()}`);
-  //   getRecords({ offset: pOffset }).then((data) => {
-  //     console.log("data: ", data);
-  //     if (!data || data.error) {
-  //       console.log(data.error);
-  //     } else {
-  //       console.log("on home : ", data);
-  //       setRows(data);
-  //     }
-  //   });
-  // };
+  const { jobCode, customer, company, queryConditions } = filters;
 
   const loadRecords = ({ pOffset, conditions }) => {
     console.log("args: ", pOffset, conditions);
     console.log(`called load records at ${Date.now()}`);
-    getFilteredRecords({ offset: pOffset, conditions: conditions }).then(
+    getFilteredArchiveRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
         console.log("data: ", data);
         if (!data || data.error) {
@@ -157,6 +140,40 @@ export const Records = () => {
     );
   };
 
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  };
+
+  const handleArchiveDateSubmit = (e) => {
+    e.preventDefault();
+    archiveJobs({ date: date }).then((data) => {
+      if (!data || data.error) {
+        alert("error");
+      } else {
+        alert("success");
+      }
+    });
+  };
+
+  const dateForm = () => {
+    return (
+      <form className="mb-3 ml-3" onSubmit={handleArchiveDateSubmit}>
+        <div>
+          <div className="form-group ml-2">
+            <label for="archivedate">Archive Date</label>
+            <input
+              type="date"
+              id="archivedate"
+              name="archivedate"
+              onChange={handleDateChange}
+            />
+          </div>
+        </div>
+        <button className="btn btn-outline-primary ml-2">Archive</button>
+      </form>
+    );
+  };
+
   const statusLabel = ({ status }) => {
     let color = "white";
 
@@ -179,22 +196,6 @@ export const Records = () => {
 
     return <td style={{ backgroundColor: `${color}` }}>{status}</td>;
   };
-
-  // const updateHandler = ({ jobKey }) => {
-  //   return () => {
-  //     console.log(jobKey);
-  //   };
-  // };
-
-  // const statusButton = ({ handler }) => {
-  //   return (
-  //     <td style={{ display: "flex", justifyContent: "center" }}>
-  //       <button className="btn btn-outline-primary " onClick={handler}>
-  //         Update
-  //       </button>
-  //     </td>
-  //   );
-  // };
 
   const messageModal = ({ text }) => {
     const style = {
@@ -237,108 +238,22 @@ export const Records = () => {
     );
   };
 
-  const handeStatusDrop = (e) => {
-    setJobStatus(e.target.value);
-  };
-
-  const updateModal = ({ jobKey, pJobStatus }) => {
-    const style = {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 400,
-      bgcolor: "background.paper",
-      border: "2px solid #000",
-      // boxShadow: 24,
-      p: 4,
-    };
-
-    const handleOpen = () => {
-      setUpdateOpen(true);
-      console.log(jobKey);
-      setJobKeyState(jobKey);
-      setJobStatus(pJobStatus);
-    };
-    const handleClose = () => {
-      setUpdateOpen(false);
-      setFilters({ ...filters, updateMessage: "" });
-      setJobKeyState(-1);
-    };
-
-    const handleUpdateSubmit = (e) => {
-      e.preventDefault();
-      setUpdateOpen(false);
-      console.log(jobKeyState);
-      console.log(jobStatus);
-
-      updateJobStatus({
-        jobKey: jobKeyState,
-        jobStatus: jobStatus,
-        updateMessage: updateMessage,
-      }).then((data) => {
-        if (!data || data.error) {
-          console.log(data);
-        } else {
-          console.log("success");
-          alert("Update successful");
-        }
-      });
-    };
-
-    return (
-      <td>
-        <Button onClick={handleOpen}>Update</Button>
-        <Modal
-          open={updateOpen}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <form className="mb-3" onSubmit={handleUpdateSubmit}>
-              {/* {JSON.stringify(filters)}
-              {JSON.stringify(jobStatus)}
-              {JSON.stringify(jobKeyState)} */}
-              <div className="form-row">
-                <div className="form-group ml-2">
-                  <label className="text-muted">Update Engineer Message</label>
-                  <textarea
-                    type="text"
-                    onChange={handleChange("updateMessage")}
-                    className="form-control"
-                    // value={jobCode}
-                  />
-                  <label className="text-muted mt-5">Update Status</label>
-                  <div>
-                    <select className="btn mr-2" onChange={handeStatusDrop}>
-                      <option value="Pending">Pending</option>
-                      <option value="WIP">WIP</option>
-                      <option value="Solved">Solved</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button className="btn btn-outline-primary mt-2">Submit</button>
-            </form>
-          </Box>
-        </Modal>
-      </td>
-    );
-  };
-
   return (
     <div>
-      {filterForm()}
+      <div className="d-flex flex-row justify-content-between">
+        <div className="ml-5">{filterForm()}</div>
+        <div className="mr-5 bg-light">
+          {JSON.stringify(date)}
+          {dateForm()}
+        </div>
+      </div>
+
       <div className="next-prev" style={{ margin: "10px" }}>
         <button className="prev-btn" onClick={prevRecords}>
           Previous
         </button>
         <div className="records-heading">
-          <h2>Records</h2>
+          <h2>Archived Records</h2>
         </div>
         <button className="next-btn" onClick={nextRecords}>
           Next
@@ -360,7 +275,6 @@ export const Records = () => {
             <th>MailSent</th>
             <th>Engg Status</th>
             <th>Engg Message</th>
-            <th>Update</th>
           </tr>
           {rows.map((row, i) => {
             return (
@@ -377,11 +291,6 @@ export const Records = () => {
                 <td>{row.MailSent}</td>
                 {statusLabel({ status: row.EnggStatus })}
                 {messageModal({ text: row.EnggMessage })}
-                {/* <td>{row.EnggMessage}</td> */}
-                {updateModal({
-                  jobKey: row.JobKey,
-                  pJobStatus: row.EnggStatus,
-                })}
               </tr>
             );
           })}

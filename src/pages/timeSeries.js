@@ -24,6 +24,7 @@ export const Time = () => {
   // 7: "",
   // 8: "",
   // 9: ""
+  const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
 
   const days = [];
 
@@ -35,6 +36,7 @@ export const Time = () => {
 
     getTimeSeriesData({ starttime: date, endtime: nextDate })
       .then((data) => {
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         if (!data || data.error) {
           console.log(data);
         } else {
@@ -46,6 +48,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count2: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -64,6 +67,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count3: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -82,6 +86,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -100,6 +105,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -118,6 +124,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -136,6 +143,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
@@ -154,6 +162,7 @@ export const Time = () => {
       })
       .then(() => {
         i++;
+        //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();

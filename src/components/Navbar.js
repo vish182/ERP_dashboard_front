@@ -63,7 +63,7 @@ const NavItems = ({ openCallback }) => {
       <NavItem text="Dashboard" route="/dashboard" />
       <NavItem text="Time" route="/time" />
 
-      <NavItem text="Three" route="/products">
+      <NavItem text="Archives" route="/archives">
         {/* {ul drop down} */}
       </NavItem>
       {/* <NavItem text="Parts" route="/"/> */}

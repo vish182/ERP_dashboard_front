@@ -1,6 +1,7 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Records } from "./pages/home";
+import { Archives } from "./pages/archives";
 import { Footer } from "./components/Footer";
 import { AboutUs } from "./pages/about.js";
 import { Product } from "./pages/product.js";
@@ -17,7 +18,7 @@ function App() {
       <Route path="/about" exact component={AboutUs} />
       {/* <Route path="/products" exact component={Product}/> */}
       <Route path="/time" exact component={Time} />
-      <Route path="/products" exact component={Companies} />
+      <Route path="/archives" exact component={Archives} />
       <Route path="/dashboard" exact component={Dashboard} />
       {/* <Footer/>  */}
     </BrowserRouter>
