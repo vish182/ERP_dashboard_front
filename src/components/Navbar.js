@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 import AVLogo from "../assets/emphasys_logo.jpg";
 import Media from "react-media";
 import { CSSTransition } from "react-transition-group";
-
+import { useAuth } from "../contexts/AuthContext";
 import forward from "../assets/forward.svg";
 import back from "../assets/back.svg";
 
@@ -52,6 +52,9 @@ const BurgerMenu = () => {
 };
 
 const NavItems = ({ openCallback }) => {
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
+
   return (
     <ul
       className="navbar-nav"
@@ -59,15 +62,36 @@ const NavItems = ({ openCallback }) => {
         openCallback && openCallback(false);
       }}
     >
-      <NavItem text="Records" route="/" />
-      <NavItem text="Dashboard" route="/dashboard" />
-      <NavItem text="Time" route="/time" />
-
-      <NavItem text="Archives" route="/archives">
-        {/* {ul drop down} */}
-      </NavItem>
       {/* <NavItem text="Parts" route="/"/> */}
-      <NavItem text="Four" route="/contact" />
+
+      {!currentUser && (
+        <>
+          <NavItem text="Sign-in" route="/signin" />
+          <NavItem text="Sign-up" route="/signup" />
+        </>
+      )}
+      {currentUser && (
+        <>
+          <NavItem text="Records" route="/" />
+          <NavItem text="Dashboard" route="/dashboard" />
+          <NavItem text="Time" route="/time" />
+
+          <NavItem text="Archives" route="/archives">
+            {/* {ul drop down} */}
+          </NavItem>
+          <NavItem text="Four" route="/contact" />
+
+          <li
+            className="nav-item"
+            onClick={async () => {
+              await logout();
+              history.push("/signin");
+            }}
+          >
+            Log out{" "}
+          </li>
+        </>
+      )}
     </ul>
   );
 };

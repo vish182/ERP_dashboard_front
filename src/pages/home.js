@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
 import { updateJobStatus, getFilteredRecords } from "../api";
+import { useAuth } from "../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 import "../styles/home.css";
 
 export const Records = () => {
+  const { currentUser } = useAuth();
+
+  const history = useHistory();
+
   const [rows, setRows] = useState([]);
 
   const [offset, setOffset] = useState(0);
@@ -24,6 +30,8 @@ export const Records = () => {
   const [jobStatus, setJobStatus] = useState("Pending");
 
   const [message, setMessage] = useState("");
+
+  const [updateList, setUpdateList] = useState([]);
 
   const { jobCode, customer, company, queryConditions, updateMessage } =
     filters;
@@ -48,9 +56,9 @@ export const Records = () => {
       (data) => {
         console.log("data: ", data);
         if (!data || data.error) {
-          console.log(data);
+          //console.log(data);
         } else {
-          console.log("on home : ", data);
+          //console.log("on home : ", data);
           setRows(data);
         }
       }
@@ -111,7 +119,7 @@ export const Records = () => {
 
     setFilters({ ...filters, queryConditions: conditions });
 
-    console.log("conditions: ", conditions);
+    //console.log("conditions: ", conditions);
 
     loadRecords({ pOffset: offset, conditions: queryConditions });
   };
@@ -202,18 +210,42 @@ export const Records = () => {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      width: 400,
+      width: 800,
       bgcolor: "background.paper",
       border: "2px solid #000",
       // boxShadow: 24,
       p: 4,
     };
 
+    const parseUpdates = ({ str }) => {
+      let updates = [];
+
+      if (!str || str.length == 0) return;
+
+      let head = 0;
+      let i = 0;
+      for (i = 0; i < str.length; i++) {
+        if (str[i] == "|") {
+          updates.push(str.slice(head, i));
+          head = i + 1;
+        }
+      }
+      updates.push(str.slice(head, i));
+
+      setUpdateList(updates);
+    };
+
     const handleOpen = () => {
+      console.log("message text: ", text);
       setMessage(text);
+
+      parseUpdates({ str: text });
       setMessageOpen(true);
     };
-    const handleClose = () => setMessageOpen(false);
+    const handleClose = () => {
+      setMessageOpen(false);
+      setUpdateList([]);
+    };
 
     return (
       <td>
@@ -228,9 +260,10 @@ export const Records = () => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Engineer Message
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              {message}
-            </Typography>
+
+            {updateList.map((item, i) => (
+              <p>{item}</p>
+            ))}
           </Box>
         </Modal>
       </td>
@@ -241,13 +274,13 @@ export const Records = () => {
     setJobStatus(e.target.value);
   };
 
-  const updateModal = ({ jobKey, pJobStatus }) => {
+  const updateModal = ({ jobKey, pJobStatus, prevText }) => {
     const style = {
       position: "absolute",
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      width: 400,
+      width: 600,
       bgcolor: "background.paper",
       border: "2px solid #000",
       // boxShadow: 24,
@@ -256,9 +289,11 @@ export const Records = () => {
 
     const handleOpen = () => {
       setUpdateOpen(true);
-      console.log(jobKey);
+      //console.log(jobKey);
+      //console.log("precmsg0: ", prevText);
       setJobKeyState(jobKey);
       setJobStatus(pJobStatus);
+      setMessage(prevText);
     };
     const handleClose = () => {
       setUpdateOpen(false);
@@ -269,18 +304,29 @@ export const Records = () => {
     const handleUpdateSubmit = (e) => {
       e.preventDefault();
       setUpdateOpen(false);
-      console.log(jobKeyState);
+      //console.log(jobKeyState);
       console.log(jobStatus);
+      console.log("prevmessage: ", message);
 
       updateJobStatus({
         jobKey: jobKeyState,
         jobStatus: jobStatus,
-        updateMessage: updateMessage,
+        updateMessage:
+          message +
+          "[" +
+          String(new Date()).slice(4, 24) +
+          "]" +
+          "[" +
+          currentUser.email +
+          "]" +
+          " " +
+          updateMessage +
+          "|",
       }).then((data) => {
         if (!data || data.error) {
           console.log(data);
         } else {
-          console.log("success");
+          //console.log("success");
           alert("Update successful");
         }
       });
@@ -308,6 +354,7 @@ export const Records = () => {
                   <label className="text-muted">Update Engineer Message</label>
                   <textarea
                     type="text"
+                    style={{ width: "500px", height: "200px" }}
                     onChange={handleChange("updateMessage")}
                     className="form-control"
                     // value={jobCode}
@@ -348,17 +395,17 @@ export const Records = () => {
       <div>
         <table className="record-table">
           <tr className="table-heading">
-            <th>TaskName</th>
-            <th>JobCode</th>
-            <th>User</th>
+            <th>Task Sheduler</th>
+            <th>ERP JobName</th>
+            {/* <th>User</th> */}
             <th>Company</th>
-            <th>Database</th>
-            <th>DataInstance</th>
+            {/* <th>Database</th> */}
+            {/* <th>DataInstance</th> */}
             <th>ExecutedOn</th>
             <th>TerminatedOn</th>
-            <th>ExecutionType</th>
-            <th>MailSent</th>
-            <th>Engg Status</th>
+            <th>Execution Status</th>
+            {/* <th>MailSent</th> */}
+            <th>Alert status</th>
             <th>Engg Message</th>
             <th>Update</th>
           </tr>
@@ -367,20 +414,21 @@ export const Records = () => {
               <tr key={i}>
                 <td>{row.TaskName}</td>
                 <td>{row.JobCode}</td>
-                <td>{row.User}</td>
+                {/* <td>{row.User}</td> */}
                 <td>{row.Company}</td>
-                <td>{row.Database}</td>
-                <td>{row.DataInstance}</td>
+                {/* <td>{row.Database}</td>
+                <td>{row.DataInstance}</td> */}
                 <td>{row.ExecutedOn}</td>
                 <td>{row.TerminatedOn}</td>
                 <td>{row.ExecutionType}</td>
-                <td>{row.MailSent}</td>
+                {/* <td>{row.MailSent}</td> */}
                 {statusLabel({ status: row.EnggStatus })}
                 {messageModal({ text: row.EnggMessage })}
                 {/* <td>{row.EnggMessage}</td> */}
                 {updateModal({
                   jobKey: row.JobKey,
                   pJobStatus: row.EnggStatus,
+                  prevText: row.EnggMessage,
                 })}
               </tr>
             );
