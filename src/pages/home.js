@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
-import { updateJobStatus, getFilteredRecords } from "../api";
+import { updateJobStatus, getFilteredRecords, getCompanyList } from "../api";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import Checkbox from "../components/checkbox";
 
 import "../styles/home.css";
 
@@ -21,6 +22,7 @@ export const Records = () => {
     company: "",
     queryConditions: "",
     updateMessage: "",
+    checkedCompanyList: [],
   });
 
   const [updateOpen, setUpdateOpen] = useState(false);
@@ -33,8 +35,18 @@ export const Records = () => {
 
   const [updateList, setUpdateList] = useState([]);
 
-  const { jobCode, customer, company, queryConditions, updateMessage } =
-    filters;
+  const [companyList, setCompanyList] = useState([]);
+
+  const [date, setDate] = useState({ start: "", end: "" });
+
+  const {
+    jobCode,
+    customer,
+    company,
+    queryConditions,
+    updateMessage,
+    checkedCompanyList,
+  } = filters;
 
   // const loadRecords = ({ pOffset }) => {
   //   console.log(`called load records at ${Date.now()}`);
@@ -49,9 +61,22 @@ export const Records = () => {
   //   });
   // };
 
+  const loadCompanies = () => {
+    let conditions = "";
+
+    if (date.start != "" && date.end != "") {
+      conditions += ` ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}' `;
+    }
+
+    getCompanyList({ condition: conditions }).then((data) => {
+      console.log("company data: ", data);
+      setCompanyList(data);
+    });
+  };
+
   const loadRecords = ({ pOffset, conditions }) => {
-    console.log("args: ", pOffset, conditions);
-    console.log(`called load records at ${Date.now()}`);
+    // console.log("args: ", pOffset, conditions);
+    // console.log(`called load records at ${Date.now()}`);
     getFilteredRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
         console.log("data: ", data);
@@ -60,6 +85,7 @@ export const Records = () => {
         } else {
           //console.log("on home : ", data);
           setRows(data);
+          loadCompanies();
         }
       }
     );
@@ -99,6 +125,10 @@ export const Records = () => {
     };
   };
 
+  const handleCheckbox = (companyList) => {
+    setFilters({ ...filters, checkedCompanyList: companyList });
+  };
+
   const handleFilterSubmit = (e) => {
     e.preventDefault();
 
@@ -114,12 +144,36 @@ export const Records = () => {
     }
 
     if (company != "") {
-      conditions += ` AND Company = '${company}'`;
+      if (checkedCompanyList.length == 0) {
+        conditions += ` AND Company IN ('${company}')`;
+      } else {
+        let companyListString = ` AND Company IN ('${company}',`;
+        checkedCompanyList.forEach((c) => {
+          companyListString += `'${c}',`;
+        });
+        companyListString += `''`;
+        companyListString += `)`;
+        conditions += companyListString;
+      }
+    } else {
+      if (checkedCompanyList.length != 0) {
+        let companyListString = ` AND Company IN (`;
+        checkedCompanyList.forEach((c) => {
+          companyListString += `'${c}',`;
+        });
+        companyListString += `''`;
+        companyListString += `)`;
+        conditions += companyListString;
+      }
+    }
+
+    if (date.start != "" && date.end != "") {
+      conditions += ` AND ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}'`;
     }
 
     setFilters({ ...filters, queryConditions: conditions });
 
-    //console.log("conditions: ", conditions);
+    console.log("conditions: ", conditions);
 
     loadRecords({ pOffset: offset, conditions: queryConditions });
   };
@@ -261,9 +315,11 @@ export const Records = () => {
               Engineer Message
             </Typography>
 
-            {updateList.map((item, i) => (
-              <p>{item}</p>
-            ))}
+            <div style={{ overflow: "scroll", height: "300px" }}>
+              {updateList.map((item, i) => (
+                <p>{item}</p>
+              ))}
+            </div>
           </Box>
         </Modal>
       </td>
@@ -319,7 +375,9 @@ export const Records = () => {
           "[" +
           currentUser.email +
           "]" +
-          " " +
+          "[" +
+          jobStatus +
+          "]" +
           updateMessage +
           "|",
       }).then((data) => {
@@ -362,6 +420,7 @@ export const Records = () => {
                   <label className="text-muted mt-5">Update Status</label>
                   <div>
                     <select className="btn mr-2" onChange={handeStatusDrop}>
+                      <option value="WIP">Select</option>
                       <option value="Pending">Pending</option>
                       <option value="WIP">WIP</option>
                       <option value="Solved">Solved</option>
@@ -377,70 +436,123 @@ export const Records = () => {
     );
   };
 
+  const dateForm = ({ pDateType }) => {
+    return (
+      <div>
+        <div className="form-group ml-2">
+          <label for="archivedate" className="mr-2">
+            {String(pDateType).toLocaleUpperCase()}
+          </label>
+          <input
+            type="date"
+            id="archivedate"
+            name="archivedate"
+            onChange={handleDate(pDateType)}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const handleDate = (dateType) => {
+    return (e) => {
+      setDate({ ...date, [dateType]: e.target.value });
+    };
+  };
+
   return (
     <div>
-      {filterForm()}
-      <div className="next-prev" style={{ margin: "10px" }}>
-        <button className="prev-btn" onClick={prevRecords}>
-          Previous
-        </button>
-        <div className="records-heading">
-          <h2>Records</h2>
+      <div className="d-flex flex-row ml-2">
+        {filterForm()}
+        <div className="ml-2">
+          <div style={{ textAlign: "center" }}>
+            <h4>Date From and To</h4>
+          </div>
+          <div className="d-flex flex-row justify-content-center">
+            <div className="mr-5 bg-light">
+              {JSON.stringify(date)}
+              {dateForm({ pDateType: "start" })}
+            </div>
+            <div className="mr-5 bg-light">
+              {JSON.stringify(date)}
+              {dateForm({ pDateType: "end" })}
+            </div>
+          </div>
         </div>
-        <button className="next-btn" onClick={nextRecords}>
-          Next
-        </button>
       </div>
 
-      <div>
-        <table className="record-table">
-          <tr className="table-heading">
-            <th>Task Sheduler</th>
-            <th>ERP JobName</th>
-            {/* <th>User</th> */}
-            <th>Company</th>
-            {/* <th>Database</th> */}
-            {/* <th>DataInstance</th> */}
-            <th>ExecutedOn</th>
-            <th>TerminatedOn</th>
-            <th>Execution Status</th>
-            {/* <th>MailSent</th> */}
-            <th>Alert status</th>
-            <th>Engg Message</th>
-            <th>Update</th>
-          </tr>
-          {rows.map((row, i) => {
-            return (
-              <tr key={i}>
-                <td>{row.TaskName}</td>
-                <td>{row.JobCode}</td>
-                {/* <td>{row.User}</td> */}
-                <td>{row.Company}</td>
-                {/* <td>{row.Database}</td>
-                <td>{row.DataInstance}</td> */}
-                <td>{row.ExecutedOn}</td>
-                <td>{row.TerminatedOn}</td>
-                <td>{row.ExecutionType}</td>
-                {/* <td>{row.MailSent}</td> */}
-                {statusLabel({ status: row.EnggStatus })}
-                {messageModal({ text: row.EnggMessage })}
-                {/* <td>{row.EnggMessage}</td> */}
-                {updateModal({
-                  jobKey: row.JobKey,
-                  pJobStatus: row.EnggStatus,
-                  prevText: row.EnggMessage,
-                })}
+      <div className="home-parent">
+        <div className="checkbox-parent mt-5">
+          <label style={{ fontSize: "1.5em" }}>Companies</label>
+          <Checkbox
+            items={companyList}
+            handleFilters={(filters) => handleCheckbox(filters)}
+          />
+        </div>
+        <div className="record-main">
+          <div className="next-prev" style={{ margin: "10px" }}>
+            <button className="prev-btn" onClick={prevRecords}>
+              Previous
+            </button>
+            <div className="record-heading">
+              <h2>Records</h2>
+            </div>
+            <button className="next-btn" onClick={nextRecords}>
+              Next
+            </button>
+          </div>
+
+          <div>
+            <table className="record-table">
+              <tr className="table-heading">
+                <th>Task Sheduler</th>
+                <th>ERP JobName</th>
+                {/* <th>User</th> */}
+                <th>Company</th>
+                {/* <th>Database</th> */}
+                {/* <th>DataInstance</th> */}
+                <th>ExecutedOn</th>
+                <th>TerminatedOn</th>
+                <th>Execution Status</th>
+                {/* <th>MailSent</th> */}
+                <th>Alert status</th>
+                <th>Engg Message</th>
+                <th>Update</th>
               </tr>
-            );
-          })}
-        </table>
-        <div className="next-prev">
-          <button className="prev-btn" onClick={prevRecords}>
-            Previous
-          </button>
-          <button className="next-btn" onClick={nextRecords}>
-            Next
-          </button>
+              {rows.map((row, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{row.TaskName}</td>
+                    <td>{row.JobCode}</td>
+                    {/* <td>{row.User}</td> */}
+                    <td>{row.Company}</td>
+                    {/* <td>{row.Database}</td>
+                <td>{row.DataInstance}</td> */}
+                    <td>{row.ExecutedOn}</td>
+                    <td>{row.TerminatedOn}</td>
+                    <td>{row.ExecutionType}</td>
+                    {/* <td>{row.MailSent}</td> */}
+                    {statusLabel({ status: row.EnggStatus })}
+                    {messageModal({ text: row.EnggMessage })}
+                    {/* <td>{row.EnggMessage}</td> */}
+                    {updateModal({
+                      jobKey: row.JobKey,
+                      pJobStatus: row.EnggStatus,
+                      prevText: row.EnggMessage,
+                    })}
+                  </tr>
+                );
+              })}
+            </table>
+            <div className="next-prev">
+              <button className="prev-btn" onClick={prevRecords}>
+                Previous
+              </button>
+              <button className="next-btn" onClick={nextRecords}>
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

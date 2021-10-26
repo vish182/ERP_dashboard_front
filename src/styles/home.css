@@ -1,4 +1,27 @@
-.records-heading {
+.home-parent {
+  display: flex;
+  flex-direction: row;
+}
+.checkbox-parent {
+  align-items: center;
+  margin: 10px;
+  border-style: solid;
+  border-width: 1px;
+  /* border-color: black; */
+  border-radius: 5px;
+
+  width: 200px;
+
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  height: fit-content;
+  padding: 5px;
+}
+
+.record-main {
+}
+
+.record-heading {
   display: flex;
   justify-content: center;
 }
