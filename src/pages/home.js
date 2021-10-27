@@ -65,7 +65,7 @@ export const Records = () => {
     let conditions = "";
 
     if (date.start != "" && date.end != "") {
-      conditions += ` ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}' `;
+      conditions += `AND ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}' `;
     }
 
     getCompanyList({ condition: conditions }).then((data) => {
@@ -470,11 +470,11 @@ export const Records = () => {
           </div>
           <div className="d-flex flex-row justify-content-center">
             <div className="mr-5 bg-light">
-              {JSON.stringify(date)}
+              {/* {JSON.stringify(date)} */}
               {dateForm({ pDateType: "start" })}
             </div>
             <div className="mr-5 bg-light">
-              {JSON.stringify(date)}
+              {/* {JSON.stringify(date)} */}
               {dateForm({ pDateType: "end" })}
             </div>
           </div>
@@ -520,28 +520,56 @@ export const Records = () => {
                 <th>Update</th>
               </tr>
               {rows.map((row, i) => {
-                return (
-                  <tr key={i}>
-                    <td>{row.TaskName}</td>
-                    <td>{row.JobCode}</td>
-                    {/* <td>{row.User}</td> */}
-                    <td>{row.Company}</td>
-                    {/* <td>{row.Database}</td>
-                <td>{row.DataInstance}</td> */}
-                    <td>{row.ExecutedOn}</td>
-                    <td>{row.TerminatedOn}</td>
-                    <td>{row.ExecutionType}</td>
-                    {/* <td>{row.MailSent}</td> */}
-                    {statusLabel({ status: row.EnggStatus })}
-                    {messageModal({ text: row.EnggMessage })}
-                    {/* <td>{row.EnggMessage}</td> */}
-                    {updateModal({
-                      jobKey: row.JobKey,
-                      pJobStatus: row.EnggStatus,
-                      prevText: row.EnggMessage,
-                    })}
-                  </tr>
-                );
+                if (row.EnggStatus == "Pending") {
+                  return (
+                    <tr key={i}>
+                      <td>{row.TaskName}</td>
+                      <td>{row.JobCode}</td>
+                      {/* <td>{row.User}</td> */}
+                      <td>{row.Company}</td>
+                      {/* <td>{row.Database}</td>
+                  <td>{row.DataInstance}</td> */}
+                      <td>{row.ExecutedOn}</td>
+                      <td>{row.TerminatedOn}</td>
+                      <td>{row.ExecutionType}</td>
+                      {/* <td>{row.MailSent}</td> */}
+                      {statusLabel({ status: row.EnggStatus })}
+                      {messageModal({ text: row.EnggMessage })}
+                      {/* <td>{row.EnggMessage}</td> */}
+                      {updateModal({
+                        jobKey: row.JobKey,
+                        pJobStatus: row.EnggStatus,
+                        prevText: row.EnggMessage,
+                      })}
+                    </tr>
+                  );
+                }
+              })}
+              {rows.map((row, i) => {
+                if (row.EnggStatus != "Pending") {
+                  return (
+                    <tr key={i}>
+                      <td>{row.TaskName}</td>
+                      <td>{row.JobCode}</td>
+                      {/* <td>{row.User}</td> */}
+                      <td>{row.Company}</td>
+                      {/* <td>{row.Database}</td>
+                  <td>{row.DataInstance}</td> */}
+                      <td>{row.ExecutedOn}</td>
+                      <td>{row.TerminatedOn}</td>
+                      <td>{row.ExecutionType}</td>
+                      {/* <td>{row.MailSent}</td> */}
+                      {statusLabel({ status: row.EnggStatus })}
+                      {messageModal({ text: row.EnggMessage })}
+                      {/* <td>{row.EnggMessage}</td> */}
+                      {updateModal({
+                        jobKey: row.JobKey,
+                        pJobStatus: row.EnggStatus,
+                        prevText: row.EnggMessage,
+                      })}
+                    </tr>
+                  );
+                }
               })}
             </table>
             <div className="next-prev">
