@@ -76,7 +76,7 @@ const TrafficByDevice = (props) => {
   const loadExecutionTypes = () => {
     getExecutionTypes().then((res) => {
       if (!res || res.error) {
-        console.log(res);
+        //console.log(res);
       } else {
         let sum = 0;
         let types = [];
@@ -106,7 +106,7 @@ const TrafficByDevice = (props) => {
 
         setDevices(percents);
 
-        console.log(res);
+        //console.log(res);
       }
     });
   };

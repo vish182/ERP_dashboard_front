@@ -7,8 +7,7 @@ export const getRecords = ({ offset }) => {
     method: "GET",
   })
     .then((response) => {
-      //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -20,8 +19,8 @@ export const getFilteredRecords = ({ offset, conditions }) => {
   //console.log(user.name, user.email, user.password, user.phone);
   // console.log(`${API}/filteredrecords/${offset}`);
   // console.log(conditions);
-  console.log("srtingify: ", offset, JSON.stringify(conditions));
-  console.log("srtingify: ", conditions);
+
+  console.log("conditions in filtered records : ", conditions);
   return fetch(`${API}/filteredrecords/${offset}`, {
     method: "POST",
     headers: {
@@ -32,7 +31,31 @@ export const getFilteredRecords = ({ offset, conditions }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const getSolvedRecords = ({ offset, conditions }) => {
+  //console.log(user.name, user.email, user.password, user.phone);
+  // console.log(`${API}/filteredrecords/${offset}`);
+  // console.log(conditions);
+
+  console.log("conditions in filtered records : ", conditions);
+  return fetch(`${API}/solvedrecords/${offset}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ conditions: conditions }),
+  })
+    .then((response) => {
+      //console.log(JSON.stringify(response.json()));
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -44,7 +67,7 @@ export const updateJobStatus = ({ jobKey, updateMessage, jobStatus }) => {
   //console.log(user.name, user.email, user.password, user.phone);
   // console.log(`${API}/filteredrecords/${offset}`);
   // console.log(conditions);
-  console.log("srtingify: ", jobKey, updateMessage, jobStatus);
+  console.log("update job status log: ", jobKey, updateMessage, jobStatus);
   return fetch(`${API}/update_job_status`, {
     method: "POST",
     headers: {
@@ -59,7 +82,7 @@ export const updateJobStatus = ({ jobKey, updateMessage, jobStatus }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -71,7 +94,7 @@ export const archiveJobs = ({ date }) => {
   //console.log(user.name, user.email, user.password, user.phone);
   // console.log(`${API}/filteredrecords/${offset}`);
   // console.log(conditions);
-  console.log("srtingify date: ", date);
+  console.log("archive date: ", date);
   return fetch(`${API}/archive_jobs`, {
     method: "POST",
     headers: {
@@ -84,7 +107,7 @@ export const archiveJobs = ({ date }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -96,8 +119,8 @@ export const getFilteredArchiveRecords = ({ offset, conditions }) => {
   //console.log(user.name, user.email, user.password, user.phone);
   // console.log(`${API}/filteredrecords/${offset}`);
   // console.log(conditions);
-  console.log("srtingify: ", offset, JSON.stringify(conditions));
-  console.log("srtingify: ", conditions);
+  //console.log("srtingify: ", offset, JSON.stringify(conditions));
+  console.log("filtered archive conditions: ", conditions);
   return fetch(`${API}/filtered_archived_records/${offset}`, {
     method: "POST",
     headers: {
@@ -108,7 +131,7 @@ export const getFilteredArchiveRecords = ({ offset, conditions }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -124,7 +147,7 @@ export const getExecutionTypes = () => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -145,7 +168,7 @@ export const getCompanyList = ({ condition }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {
@@ -159,7 +182,7 @@ export const getTimeSeriesData = ({ starttime, endtime }) => {
   })
     .then((response) => {
       //console.log(JSON.stringify(response.json()));
-      console.log(response);
+      //console.log(response);
       return response.json();
     })
     .catch((err) => {

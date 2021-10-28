@@ -34,7 +34,7 @@ const Signin = () => {
     try {
       await login({ email: email, password: password });
 
-      history.push("/dashboard");
+      history.push("/");
     } catch (err) {
       setValues({ ...values, error: false, loading: false });
       alert("Failed to log in");

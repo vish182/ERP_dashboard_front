@@ -6,9 +6,10 @@ import { useHistory } from "react-router-dom";
 import Checkbox from "../components/checkbox";
 
 import "../styles/home.css";
+import { isAuthorized } from "../auth/utility";
 
 export const Records = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, currentUserDoc } = useAuth();
 
   const history = useHistory();
 
@@ -36,6 +37,8 @@ export const Records = () => {
   const [updateList, setUpdateList] = useState([]);
 
   const [companyList, setCompanyList] = useState([]);
+
+  const [customerDropValue, setCustomerDropValue] = useState("all");
 
   const [date, setDate] = useState({ start: "", end: "" });
 
@@ -69,7 +72,7 @@ export const Records = () => {
     }
 
     getCompanyList({ condition: conditions }).then((data) => {
-      console.log("company data: ", data);
+      //console.log("company list data: ", data);
       setCompanyList(data);
     });
   };
@@ -79,7 +82,7 @@ export const Records = () => {
     // console.log(`called load records at ${Date.now()}`);
     getFilteredRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
-        console.log("data: ", data);
+        //console.log("data: ", data);
         if (!data || data.error) {
           //console.log(data);
         } else {
@@ -170,6 +173,10 @@ export const Records = () => {
     if (date.start != "" && date.end != "") {
       conditions += ` AND ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}'`;
     }
+
+    // if (customerDropValue != "") {
+    //   conditions += ` AND Customer = '${customerDropValue}'`;
+    // }
 
     setFilters({ ...filters, queryConditions: conditions });
 
@@ -290,7 +297,7 @@ export const Records = () => {
     };
 
     const handleOpen = () => {
-      console.log("message text: ", text);
+      //console.log("message text: ", text);
       setMessage(text);
 
       parseUpdates({ str: text });
@@ -361,8 +368,8 @@ export const Records = () => {
       e.preventDefault();
       setUpdateOpen(false);
       //console.log(jobKeyState);
-      console.log(jobStatus);
-      console.log("prevmessage: ", message);
+      //console.log(jobStatus);
+      //console.log("prevmessage: ", message);
 
       updateJobStatus({
         jobKey: jobKeyState,
@@ -382,7 +389,7 @@ export const Records = () => {
           "|",
       }).then((data) => {
         if (!data || data.error) {
-          console.log(data);
+          console.log("update job status error: ", data);
         } else {
           //console.log("success");
           alert("Update successful");
@@ -460,6 +467,31 @@ export const Records = () => {
     };
   };
 
+  const handleCustomerDrop = (e) => {
+    setCustomerDropValue(e.target.value);
+  };
+
+  const customerDrop = () => {
+    let custList = [];
+    return (
+      <div>
+        <select className="btn mr-2" onChange={handleCustomerDrop}>
+          <option value="all">All</option>
+          {companyList.map((comp, i) => {
+            if (!custList.includes(comp.Customer)) {
+              custList.push(comp.Customer);
+              return (
+                <option value={comp.Customer} key={i}>
+                  {comp.Customer}
+                </option>
+              );
+            }
+          })}
+        </select>
+      </div>
+    );
+  };
+
   return (
     <div>
       <div className="d-flex flex-row ml-2">
@@ -484,9 +516,14 @@ export const Records = () => {
       <div className="home-parent">
         <div className="checkbox-parent mt-5">
           <label style={{ fontSize: "1.5em" }}>Companies</label>
+          <div className="d-flex flex-row align-items-end justify-content-center">
+            <label>Customer</label>
+            {customerDrop()}
+          </div>
           <Checkbox
             items={companyList}
             handleFilters={(filters) => handleCheckbox(filters)}
+            pCustomer={customerDropValue}
           />
         </div>
         <div className="record-main">
@@ -508,6 +545,7 @@ export const Records = () => {
                 <th>Task Sheduler</th>
                 <th>ERP JobName</th>
                 {/* <th>User</th> */}
+                <th>Customer</th>
                 <th>Company</th>
                 {/* <th>Database</th> */}
                 {/* <th>DataInstance</th> */}
@@ -517,7 +555,10 @@ export const Records = () => {
                 {/* <th>MailSent</th> */}
                 <th>Alert status</th>
                 <th>Engg Message</th>
-                <th>Update</th>
+                {currentUserDoc &&
+                  isAuthorized({ role: currentUserDoc.role }) && (
+                    <th>Update</th>
+                  )}
               </tr>
               {rows.map((row, i) => {
                 if (row.EnggStatus == "Pending") {
@@ -526,6 +567,7 @@ export const Records = () => {
                       <td>{row.TaskName}</td>
                       <td>{row.JobCode}</td>
                       {/* <td>{row.User}</td> */}
+                      <td>{row.Customer}</td>
                       <td>{row.Company}</td>
                       {/* <td>{row.Database}</td>
                   <td>{row.DataInstance}</td> */}
@@ -536,11 +578,13 @@ export const Records = () => {
                       {statusLabel({ status: row.EnggStatus })}
                       {messageModal({ text: row.EnggMessage })}
                       {/* <td>{row.EnggMessage}</td> */}
-                      {updateModal({
-                        jobKey: row.JobKey,
-                        pJobStatus: row.EnggStatus,
-                        prevText: row.EnggMessage,
-                      })}
+                      {currentUserDoc &&
+                        isAuthorized({ role: currentUserDoc.role }) &&
+                        updateModal({
+                          jobKey: row.JobKey,
+                          pJobStatus: row.EnggStatus,
+                          prevText: row.EnggMessage,
+                        })}
                     </tr>
                   );
                 }
@@ -552,6 +596,7 @@ export const Records = () => {
                       <td>{row.TaskName}</td>
                       <td>{row.JobCode}</td>
                       {/* <td>{row.User}</td> */}
+                      <td>{row.Customer}</td>
                       <td>{row.Company}</td>
                       {/* <td>{row.Database}</td>
                   <td>{row.DataInstance}</td> */}
@@ -562,11 +607,13 @@ export const Records = () => {
                       {statusLabel({ status: row.EnggStatus })}
                       {messageModal({ text: row.EnggMessage })}
                       {/* <td>{row.EnggMessage}</td> */}
-                      {updateModal({
-                        jobKey: row.JobKey,
-                        pJobStatus: row.EnggStatus,
-                        prevText: row.EnggMessage,
-                      })}
+                      {currentUserDoc &&
+                        isAuthorized({ role: currentUserDoc.role }) &&
+                        updateModal({
+                          jobKey: row.JobKey,
+                          pJobStatus: row.EnggStatus,
+                          prevText: row.EnggMessage,
+                        })}
                     </tr>
                   );
                 }

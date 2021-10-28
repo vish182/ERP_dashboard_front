@@ -6,6 +6,7 @@ import { CSSTransition } from "react-transition-group";
 import { useAuth } from "../contexts/AuthContext";
 import forward from "../assets/forward.svg";
 import back from "../assets/back.svg";
+import { isAuthorized } from "../auth/utility";
 
 export const Navbar = () => {
   // console.log(window.matchMedia('(min-width: 800px)').matches);
@@ -52,7 +53,7 @@ const BurgerMenu = () => {
 };
 
 const NavItems = ({ openCallback }) => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, currentUserDoc } = useAuth();
   const history = useHistory();
 
   return (
@@ -74,12 +75,15 @@ const NavItems = ({ openCallback }) => {
         <>
           <NavItem text="Records" route="/" />
           <NavItem text="Dashboard" route="/dashboard" />
-          <NavItem text="Time" route="/time" />
-
+          {/* <NavItem text="Time" route="/time" /> */}
+          <NavItem text="History" route="/history" />
           <NavItem text="Archives" route="/archives">
             {/* {ul drop down} */}
           </NavItem>
-          <NavItem text="Four" route="/contact" />
+          {currentUserDoc &&
+            isAuthorized({ role: currentUserDoc.role }) > 0 && (
+              <NavItem text="Users" route="/users" />
+            )}
 
           <li
             className="nav-item"

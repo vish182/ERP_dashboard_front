@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-const Checkbox = ({ items, handleFilters }) => {
+const Checkbox = ({ items, handleFilters, pCustomer }) => {
   const [checked, setChecked] = useState([]);
+
+  useEffect(() => {
+    setChecked([]);
+    handleFilters([]);
+  }, [pCustomer]);
+
+  //console.log("Checkbox state: ", checked);
 
   const handleToggle = (cid) => {
     return () => {
@@ -20,18 +27,23 @@ const Checkbox = ({ items, handleFilters }) => {
     };
   };
 
-  return items.map((item, i) => (
-    <li key={i} className="form-check">
-      <label className="form-check-label mr-2">{item.Company}</label>
-      <input
-        onChange={handleToggle(item.Company)}
-        type="checkbox"
-        value={checked.indexOf(item.Company) === -1}
-        // className="form-check-input"
-      />
-      <label className="form-check-label ml-3">({item.totalCount})</label>
-    </li>
-  ));
+  return items.map((item, i) => {
+    if (pCustomer == "all" || item.Customer == pCustomer) {
+      return (
+        <li key={i} className="form-check">
+          <label className="form-check-label mr-2">{item.Company}</label>
+          <input
+            onChange={handleToggle(item.Company)}
+            type="checkbox"
+            value={checked.indexOf(item.Company) === -1}
+            checked={checked.indexOf(item.Company) !== -1}
+            // className="form-check-input"
+          />
+          <label className="form-check-label ml-3">({item.totalCount})</label>
+        </li>
+      );
+    }
+  });
 };
 
 export default Checkbox;

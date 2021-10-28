@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
-import { archiveJobs, getFilteredArchiveRecords } from "../api";
+import { getSolvedRecords } from "../api";
 
 import "../styles/home.css";
 
-export const Archives = () => {
+export const History = () => {
   const [rows, setRows] = useState([]);
 
   const [offset, setOffset] = useState(0);
@@ -20,18 +20,18 @@ export const Archives = () => {
 
   const [message, setMessage] = useState("");
 
-  const [date, setDate] = useState("1999-01-01");
+  const [updateList, setUpdateList] = useState([]);
 
   const { jobCode, customer, company, queryConditions } = filters;
 
   const loadRecords = ({ pOffset, conditions }) => {
     //console.log("args: ", pOffset, conditions);
     //console.log(`called load records at ${Date.now()}`);
-    getFilteredArchiveRecords({ offset: pOffset, conditions: conditions }).then(
+    getSolvedRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
         //console.log("data: ", data);
         if (!data || data.error) {
-          console.log(data);
+          //console.log(data);
         } else {
           //console.log("on home : ", data);
           setRows(data);
@@ -140,40 +140,6 @@ export const Archives = () => {
     );
   };
 
-  const handleDateChange = (e) => {
-    setDate(e.target.value);
-  };
-
-  const handleArchiveDateSubmit = (e) => {
-    e.preventDefault();
-    archiveJobs({ date: date }).then((data) => {
-      if (!data || data.error) {
-        alert("error");
-      } else {
-        alert("success");
-      }
-    });
-  };
-
-  const dateForm = () => {
-    return (
-      <form className="mb-3 ml-3" onSubmit={handleArchiveDateSubmit}>
-        <div>
-          <div className="form-group ml-2">
-            <label for="archivedate">Archive Date</label>
-            <input
-              type="date"
-              id="archivedate"
-              name="archivedate"
-              onChange={handleDateChange}
-            />
-          </div>
-        </div>
-        <button className="btn btn-outline-primary ml-2">Archive</button>
-      </form>
-    );
-  };
-
   const statusLabel = ({ status }) => {
     let color = "white";
 
@@ -203,18 +169,42 @@ export const Archives = () => {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      width: 400,
+      width: 800,
       bgcolor: "background.paper",
       border: "2px solid #000",
       // boxShadow: 24,
       p: 4,
     };
 
+    const parseUpdates = ({ str }) => {
+      let updates = [];
+
+      if (!str || str.length == 0) return;
+
+      let head = 0;
+      let i = 0;
+      for (i = 0; i < str.length; i++) {
+        if (str[i] == "|") {
+          updates.push(str.slice(head, i));
+          head = i + 1;
+        }
+      }
+      updates.push(str.slice(head, i));
+
+      setUpdateList(updates);
+    };
+
     const handleOpen = () => {
+      //console.log("message text: ", text);
       setMessage(text);
+
+      parseUpdates({ str: text });
       setMessageOpen(true);
     };
-    const handleClose = () => setMessageOpen(false);
+    const handleClose = () => {
+      setMessageOpen(false);
+      setUpdateList([]);
+    };
 
     return (
       <td>
@@ -229,9 +219,12 @@ export const Archives = () => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Engineer Message
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              {message}
-            </Typography>
+
+            <div style={{ overflow: "scroll", height: "300px" }}>
+              {updateList.map((item, i) => (
+                <p>{item}</p>
+              ))}
+            </div>
           </Box>
         </Modal>
       </td>
@@ -240,14 +233,7 @@ export const Archives = () => {
 
   return (
     <div>
-      <div className="d-flex flex-row justify-content-between">
-        <div className="ml-5">{filterForm()}</div>
-        <div className="mr-5 bg-light">
-          {JSON.stringify(date)}
-          {dateForm()}
-        </div>
-      </div>
-
+      <div className="ml-5">{filterForm()}</div>
       <div className="next-prev" style={{ margin: "10px" }}>
         <button className="prev-btn" onClick={prevRecords}>
           Previous

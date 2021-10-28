@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "../auth/firebase_auth";
+import { createUser, getUserData } from "../auth/firestore_auth";
 
 const AuthContext = React.createContext();
 
@@ -10,16 +11,21 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [currentUserDoc, setCurrentUserDoc] = useState({}); // custom
 
   function signup({ email, password }) {
+    createUser({ UID: email }); // custom function
     return auth.createUserWithEmailAndPassword(email, password);
   }
 
-  function login({ email, password }) {
+  async function login({ email, password }) {
+    let userData = await getUserData(email);
+    setCurrentUserDoc(userData);
     return auth.signInWithEmailAndPassword(email, password);
   }
 
   function logout() {
+    setCurrentUserDoc(undefined);
     return auth.signOut();
   }
 
@@ -46,6 +52,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    currentUserDoc,
     login,
     signup,
     logout,
