@@ -78,17 +78,16 @@ export const History = () => {
     e.preventDefault();
 
     let conditions = "";
-    let flag = false;
 
-    if (jobCode != "") {
+    if (jobCode !== "") {
       conditions += ` AND JobCode = '${jobCode}'`;
     }
 
-    if (customer != "") {
+    if (customer !== "") {
       conditions += ` AND Customer = '${customer}'`;
     }
 
-    if (company != "") {
+    if (company !== "") {
       conditions += ` AND Company = '${company}'`;
     }
 
@@ -179,12 +178,12 @@ export const History = () => {
     const parseUpdates = ({ str }) => {
       let updates = [];
 
-      if (!str || str.length == 0) return;
+      if (!str || str.length === 0) return;
 
       let head = 0;
       let i = 0;
       for (i = 0; i < str.length; i++) {
-        if (str[i] == "|") {
+        if (str[i] === "|") {
           updates.push(str.slice(head, i));
           head = i + 1;
         }

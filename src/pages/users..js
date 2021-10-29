@@ -49,7 +49,7 @@ const Users = (props) => {
       <Divider />
       <List>
         {usersList.map((user, i) => {
-          if (user.email_id != currentUserDoc.email_id) {
+          if (user.email_id !== currentUserDoc.email_id) {
             return (
               <ListItem divider={i < usersList.length - 1} key={i}>
                 {/* <ListItemAvatar>

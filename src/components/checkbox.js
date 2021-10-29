@@ -28,7 +28,7 @@ const Checkbox = ({ items, handleFilters, pCustomer }) => {
   };
 
   return items.map((item, i) => {
-    if (pCustomer == "all" || item.Customer == pCustomer) {
+    if (pCustomer === "all" || item.Customer === pCustomer) {
       return (
         <li key={i} className="form-check">
           <label className="form-check-label mr-2">{item.Company}</label>

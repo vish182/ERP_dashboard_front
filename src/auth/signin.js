@@ -14,11 +14,11 @@ const Signin = () => {
   });
 
   //   const { user } = isAuthenticated();
-  const { login, currentUser } = useAuth();
+  const { login } = useAuth();
 
   const history = useHistory();
 
-  const { email, password, error, loading, redirectToReferrer } = values;
+  const { email, password, error, loading } = values;
 
   const handleChange = (fieldName) => {
     // higher order function

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
 import { archiveJobs, getFilteredArchiveRecords } from "../api";
-import { useAuth } from "../contexts/AuthContext";
+//import { useAuth } from "../contexts/AuthContext";
 
 import "../styles/home.css";
 
@@ -25,7 +25,7 @@ export const Archives = () => {
 
   const { jobCode, customer, company, queryConditions } = filters;
 
-  const { currentUserDoc, currentUser } = useAuth();
+  // const { currentUserDoc, currentUser } = useAuth();
 
   const loadRecords = ({ pOffset, conditions }) => {
     //console.log("args: ", pOffset, conditions);
@@ -81,17 +81,16 @@ export const Archives = () => {
     e.preventDefault();
 
     let conditions = "";
-    let flag = false;
 
-    if (jobCode != "") {
+    if (jobCode !== "") {
       conditions += ` AND JobCode = '${jobCode}'`;
     }
 
-    if (customer != "") {
+    if (customer !== "") {
       conditions += ` AND Customer = '${customer}'`;
     }
 
-    if (company != "") {
+    if (company !== "") {
       conditions += ` AND Company = '${company}'`;
     }
 
@@ -252,7 +251,7 @@ export const Archives = () => {
       </div>
 
       <div className="next-prev" style={{ margin: "10px" }}>
-        {JSON.stringify(currentUserDoc)}
+        {/* {JSON.stringify(currentUserDoc)} */}
         {/* <div style={{ width: "300px" }}>
           {console.log(JSON.stringify(currentUser))}
         </div> */}

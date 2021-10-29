@@ -9,9 +9,6 @@ import {
   colors,
   useTheme,
 } from "@material-ui/core";
-import LaptopMacIcon from "@material-ui/icons/LaptopMac";
-import PhoneIcon from "@material-ui/icons/Phone";
-import TabletIcon from "@material-ui/icons/Tablet";
 import { getExecutionTypes } from "../../api";
 import { useEffect, useState } from "react";
 
@@ -71,7 +68,7 @@ const TrafficByDevice = (props) => {
 
   const [devices, setDevices] = useState([]);
 
-  const [executionTypes, setExecutionTypes] = useState([]);
+  // const [executionTypes, setExecutionTypes] = useState([]);
 
   const loadExecutionTypes = () => {
     getExecutionTypes().then((res) => {

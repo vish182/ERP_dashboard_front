@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import AVLogo from "../assets/emphasys_logo.jpg";
-import Media from "react-media";
-import { CSSTransition } from "react-transition-group";
+// import Media from "react-media";
+// import { CSSTransition } from "react-transition-group";
 import { useAuth } from "../contexts/AuthContext";
-import forward from "../assets/forward.svg";
-import back from "../assets/back.svg";
+// import forward from "../assets/forward.svg";
+// import back from "../assets/back.svg";
 import { isAuthorized } from "../auth/utility";
 import { getUserData } from "../auth/firestore_auth";
 
@@ -59,16 +59,20 @@ const NavItems = ({ openCallback }) => {
 
   const [userDoc, maintainUserDoc] = useState({});
 
-  useEffect(async () => {
+  useEffect(() => {
     //console.log("render navbar00", !currentUserDoc.role);
     //console.log("render navbar doc", currentUserDoc);
-    if (!currentUserDoc.role && currentUser) {
-      let userData = await getUserData(currentUser.email);
-      //console.log("render navbar", userData);
-      currentUserDoc.email_id = userData.email_id;
-      currentUserDoc.role = userData.role;
-      maintainUserDoc(userData);
+    async function loadUserDoc() {
+      if (!currentUserDoc.role && currentUser) {
+        let userData = await getUserData(currentUser.email);
+        //console.log("render navbar", userData);
+        currentUserDoc.email_id = userData.email_id;
+        currentUserDoc.role = userData.role;
+        maintainUserDoc(userData);
+      }
     }
+
+    loadUserDoc();
   }, []);
 
   return (
@@ -129,8 +133,7 @@ const NavItems = ({ openCallback }) => {
 //     </DropItem>
 // </ul>
 
-{
-  /* <Media query="(min-width: 800px)">
+/* <Media query="(min-width: 800px)">
             {matches => {
                 setOpen( matches ? true : false);
                 return(
@@ -170,7 +173,6 @@ const NavItems = ({ openCallback }) => {
                 )
             }}
         </Media> */
-}
 
 const NavItem = (props) => {
   // const [open, setOpen] = useState(false);
@@ -190,31 +192,31 @@ const NavItem = (props) => {
   );
 };
 
-const DropItem = (props) => {
-  const [open, setOpen] = useState(false);
-  // activeClassName="active-nav-button"
-  return (
-    <li
-      className={props.classStyle}
-      onMouseEnter={() => {
-        setOpen(!open);
-      }}
-      onMouseLeave={() => {
-        setOpen(!open);
-      }}
-    >
-      <NavLink
-        exact
-        to={props.route ? props.route : "/"}
-        className="nav-item-link"
-      >
-        {props.text}
-      </NavLink>
+// const DropItem = (props) => {
+//   const [open, setOpen] = useState(false);
+//   // activeClassName="active-nav-button"
+//   return (
+//     <li
+//       className={props.classStyle}
+//       onMouseEnter={() => {
+//         setOpen(!open);
+//       }}
+//       onMouseLeave={() => {
+//         setOpen(!open);
+//       }}
+//     >
+//       <NavLink
+//         exact
+//         to={props.route ? props.route : "/"}
+//         className="nav-item-link"
+//       >
+//         {props.text}
+//       </NavLink>
 
-      {open && props.children}
-    </li>
-  );
-};
+//       {open && props.children}
+//     </li>
+//   );
+// };
 
 // const Dropdown = () => {
 
@@ -264,7 +266,7 @@ const DropItem = (props) => {
 const Logo = () => {
   return (
     <span className="logo-div">
-      <img src={AVLogo} className="logo" />
+      <img src={AVLogo} alt="" className="logo" />
     </span>
   );
 };

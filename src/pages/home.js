@@ -67,7 +67,7 @@ export const Records = () => {
   const loadCompanies = () => {
     let conditions = "";
 
-    if (date.start != "" && date.end != "") {
+    if (date.start !== "" && date.end !== "") {
       conditions += `AND ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}' `;
     }
 
@@ -136,18 +136,17 @@ export const Records = () => {
     e.preventDefault();
 
     let conditions = "";
-    let flag = false;
 
-    if (jobCode != "") {
+    if (jobCode !== "") {
       conditions += ` AND JobCode = '${jobCode}'`;
     }
 
-    if (customer != "") {
+    if (customer !== "") {
       conditions += ` AND Customer = '${customer}'`;
     }
 
-    if (company != "") {
-      if (checkedCompanyList.length == 0) {
+    if (company !== "") {
+      if (checkedCompanyList.length === 0) {
         conditions += ` AND Company IN ('${company}')`;
       } else {
         let companyListString = ` AND Company IN ('${company}',`;
@@ -159,7 +158,7 @@ export const Records = () => {
         conditions += companyListString;
       }
     } else {
-      if (checkedCompanyList.length != 0) {
+      if (checkedCompanyList.length !== 0) {
         let companyListString = ` AND Company IN (`;
         checkedCompanyList.forEach((c) => {
           companyListString += `'${c}',`;
@@ -170,7 +169,7 @@ export const Records = () => {
       }
     }
 
-    if (date.start != "" && date.end != "") {
+    if (date.start !== "" && date.end !== "") {
       conditions += ` AND ExecutedOn < '${date.end}' AND ExecutedOn > '${date.start}'`;
     }
 
@@ -281,12 +280,12 @@ export const Records = () => {
     const parseUpdates = ({ str }) => {
       let updates = [];
 
-      if (!str || str.length == 0) return;
+      if (!str || str.length === 0) return;
 
       let head = 0;
       let i = 0;
       for (i = 0; i < str.length; i++) {
-        if (str[i] == "|") {
+        if (str[i] === "|") {
           updates.push(str.slice(head, i));
           head = i + 1;
         }
@@ -485,6 +484,8 @@ export const Records = () => {
                   {comp.Customer}
                 </option>
               );
+            } else {
+              return <></>;
             }
           })}
         </select>
@@ -561,7 +562,7 @@ export const Records = () => {
                   )}
               </tr>
               {rows.map((row, i) => {
-                if (row.EnggStatus == "Pending") {
+                if (row.EnggStatus === "Pending") {
                   return (
                     <tr key={i}>
                       <td>{row.TaskName}</td>
@@ -587,10 +588,12 @@ export const Records = () => {
                         })}
                     </tr>
                   );
+                } else {
+                  return <></>;
                 }
               })}
               {rows.map((row, i) => {
-                if (row.EnggStatus != "Pending") {
+                if (row.EnggStatus !== "Pending") {
                   return (
                     <tr key={i}>
                       <td>{row.TaskName}</td>
@@ -616,6 +619,8 @@ export const Records = () => {
                         })}
                     </tr>
                   );
+                } else {
+                  return <></>;
                 }
               })}
             </table>
