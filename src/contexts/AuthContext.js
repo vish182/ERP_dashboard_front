@@ -41,6 +41,10 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
+  function maintainUser(user) {
+    setCurrentUser(user);
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -53,6 +57,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     currentUserDoc,
+    maintainUser,
     login,
     signup,
     logout,

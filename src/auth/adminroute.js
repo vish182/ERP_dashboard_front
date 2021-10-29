@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 function AdminRoute({ component: Component, ...rest }) {
-  const { currentUser, currentUserDoc } = useAuth();
+  const { currentUserDoc } = useAuth();
 
   return (
     <Route

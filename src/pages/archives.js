@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
 import { archiveJobs, getFilteredArchiveRecords } from "../api";
+import { useAuth } from "../contexts/AuthContext";
 
 import "../styles/home.css";
 
@@ -23,6 +24,8 @@ export const Archives = () => {
   const [date, setDate] = useState("1999-01-01");
 
   const { jobCode, customer, company, queryConditions } = filters;
+
+  const { currentUserDoc, currentUser } = useAuth();
 
   const loadRecords = ({ pOffset, conditions }) => {
     //console.log("args: ", pOffset, conditions);
@@ -249,6 +252,10 @@ export const Archives = () => {
       </div>
 
       <div className="next-prev" style={{ margin: "10px" }}>
+        {JSON.stringify(currentUserDoc)}
+        {/* <div style={{ width: "300px" }}>
+          {console.log(JSON.stringify(currentUser))}
+        </div> */}
         <button className="prev-btn" onClick={prevRecords}>
           Previous
         </button>

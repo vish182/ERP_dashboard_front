@@ -7,6 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 import forward from "../assets/forward.svg";
 import back from "../assets/back.svg";
 import { isAuthorized } from "../auth/utility";
+import { getUserData } from "../auth/firestore_auth";
 
 export const Navbar = () => {
   // console.log(window.matchMedia('(min-width: 800px)').matches);
@@ -56,6 +57,20 @@ const NavItems = ({ openCallback }) => {
   const { currentUser, logout, currentUserDoc } = useAuth();
   const history = useHistory();
 
+  const [userDoc, maintainUserDoc] = useState({});
+
+  useEffect(async () => {
+    //console.log("render navbar00", !currentUserDoc.role);
+    //console.log("render navbar doc", currentUserDoc);
+    if (!currentUserDoc.role && currentUser) {
+      let userData = await getUserData(currentUser.email);
+      //console.log("render navbar", userData);
+      currentUserDoc.email_id = userData.email_id;
+      currentUserDoc.role = userData.role;
+      maintainUserDoc(userData);
+    }
+  }, []);
+
   return (
     <ul
       className="navbar-nav"
@@ -80,10 +95,9 @@ const NavItems = ({ openCallback }) => {
           <NavItem text="Archives" route="/archives">
             {/* {ul drop down} */}
           </NavItem>
-          {currentUserDoc &&
-            isAuthorized({ role: currentUserDoc.role }) > 0 && (
-              <NavItem text="Users" route="/users" />
-            )}
+          {currentUser && isAuthorized({ role: userDoc.role }) > 0 && (
+            <NavItem text="Users" route="/users" />
+          )}
 
           <li
             className="nav-item"

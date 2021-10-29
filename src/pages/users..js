@@ -7,12 +7,8 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
-  ButtonBase,
 } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import { getUsersList, updateUserRole } from "../auth/firestore_auth";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
