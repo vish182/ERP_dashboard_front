@@ -4,6 +4,7 @@ import { updateJobStatus, getFilteredRecords, getCompanyList } from "../api";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import Checkbox from "../components/checkbox";
+import { Divider } from "@material-ui/core";
 
 import "../styles/home.css";
 import { isAuthorized } from "../auth/utility";
@@ -516,7 +517,8 @@ export const Records = () => {
 
       <div className="home-parent">
         <div className="checkbox-parent mt-5">
-          <label style={{ fontSize: "1.5em" }}>Companies</label>
+          <label style={{ fontSize: "1.5em" }}>Customers</label>
+          <Divider />
           <div className="d-flex flex-row align-items-end justify-content-center">
             <label>Customer</label>
             {customerDrop()}

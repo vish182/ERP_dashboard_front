@@ -62,6 +62,7 @@ const NavItems = ({ openCallback }) => {
   useEffect(() => {
     //console.log("render navbar00", !currentUserDoc.role);
     //console.log("render navbar doc", currentUserDoc);
+    maintainUserDoc(currentUserDoc);
     async function loadUserDoc() {
       if (!currentUserDoc.role && currentUser) {
         let userData = await getUserData(currentUser.email);
