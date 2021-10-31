@@ -79,7 +79,7 @@ export const Records = () => {
   };
 
   const loadRecords = ({ pOffset, conditions }) => {
-    // console.log("args: ", pOffset, conditions);
+    console.log(" load records args: ", pOffset, conditions);
     // console.log(`called load records at ${Date.now()}`);
     getFilteredRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
@@ -87,7 +87,7 @@ export const Records = () => {
         if (!data || data.error) {
           //console.log(data);
         } else {
-          //console.log("on home : ", data);
+          console.log("load Records : ", data);
           setRows(data);
           loadCompanies();
         }
@@ -180,9 +180,9 @@ export const Records = () => {
 
     setFilters({ ...filters, queryConditions: conditions });
 
-    console.log("conditions: ", conditions);
+    console.log("conditions before load records: ", conditions);
 
-    loadRecords({ pOffset: offset, conditions: queryConditions });
+    loadRecords({ pOffset: offset, conditions: conditions });
   };
 
   const filterForm = () => {

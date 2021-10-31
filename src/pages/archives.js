@@ -98,7 +98,7 @@ export const Archives = () => {
 
     console.log("conditions: ", conditions);
 
-    loadRecords({ pOffset: offset, conditions: queryConditions });
+    loadRecords({ pOffset: offset, conditions: conditions });
   };
 
   const filterForm = () => {
