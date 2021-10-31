@@ -9,6 +9,7 @@ const Signin = () => {
     email: "",
     password: "",
     error: "",
+    errorMessage: "",
     loading: false,
     redirectToReferrer: false,
   });
@@ -18,7 +19,7 @@ const Signin = () => {
 
   const history = useHistory();
 
-  const { email, password, error, loading } = values;
+  const { email, password, error, loading, errorMessage } = values;
 
   const handleChange = (fieldName) => {
     // higher order function
@@ -36,9 +37,9 @@ const Signin = () => {
 
       history.push("/");
     } catch (err) {
-      setValues({ ...values, error: false, loading: false });
-      alert("Failed to log in");
-      console.log(err);
+      setValues({ ...values, error: true, errorMessage: err, loading: false });
+
+      alert("Failed to log in: " + err);
     }
   };
 
@@ -79,7 +80,7 @@ const Signin = () => {
         style={{ display: error ? "" : "none" }}
       >
         {" "}
-        {error}{" "}
+        {errorMessage}{" "}
       </div>
     );
   };
@@ -112,7 +113,7 @@ const Signin = () => {
       {showLoading()}
       {signUpForm()}
       {redirectUser()}
-      {JSON.stringify(values)}
+      {/* {JSON.stringify(values)} */}
     </div>
   );
 };

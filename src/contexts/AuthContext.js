@@ -20,6 +20,13 @@ export function AuthProvider({ children }) {
 
   async function login({ email, password }) {
     let userData = await getUserData(email);
+
+    if (!userData) {
+      throw "User does not exist";
+    } else if (userData && !userData.activation) {
+      throw "You are not activated, ask the administrator to approve you.";
+    }
+
     setCurrentUserDoc(userData);
     return auth.signInWithEmailAndPassword(email, password);
   }

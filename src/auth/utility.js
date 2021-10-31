@@ -5,3 +5,11 @@ export const isAuthorized = ({ role }) => {
     return false;
   }
 };
+
+export const isActivated = ({ activated }) => {
+  if (activated) {
+    return true;
+  } else {
+    return false;
+  }
+};

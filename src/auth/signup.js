@@ -10,7 +10,7 @@ const Signup = () => {
     error: undefined,
   });
 
-  const { signup, currentUser } = useAuth();
+  const { signup, currentUser, logout } = useAuth();
 
   const { email, password, success, error } = values;
 
@@ -31,8 +31,8 @@ const Signup = () => {
         email: email,
         password: password,
       });
-
-      history.push("/");
+      await logout();
+      history.push("/signin");
     } catch (err) {
       alert("Failed to create an account", err);
       console.log(err);

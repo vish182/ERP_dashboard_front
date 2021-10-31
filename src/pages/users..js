@@ -9,7 +9,7 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
-import { getUsersList, updateUserRole } from "../auth/firestore_auth";
+import { getUsersList, updateUser } from "../auth/firestore_auth";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { isAuthorized } from "../auth/utility";
@@ -29,11 +29,17 @@ const Users = (props) => {
     loadUsersList();
   }, []);
 
-  const changeRoleHandler = ({ role, email_id }) => {
+  const updateUserHandler = ({ role, email_id, activation }) => {
     return () => {
-      updateUserRole({ role: role, email: email_id });
+      updateUser({ role: role, email: email_id, activation: activation });
     };
   };
+
+  // const changeActivationHandler = ({ activation, email_id }) => {
+  //   return () => {
+  //     updateUserActivation({ activation: activation, email: email_id });
+  //   };
+  // };
 
   const getRole = ({ role }) => {
     if (role < 1) {
@@ -52,27 +58,47 @@ const Users = (props) => {
           if (user.email_id !== currentUserDoc.email_id) {
             return (
               <ListItem divider={i < usersList.length - 1} key={i}>
-                {/* <ListItemAvatar>
-              <img
-                  alt={product.name}
-                  src={product.imageUrl}
-                  style={{
-                  height: 48,
-                  width: 48
-                  }}
-              />
-              </ListItemAvatar> */}
                 <ListItemText
                   primary={user.email_id}
                   secondary={getRole({ role: user.role })}
                 />
                 <IconButton edge="end" size="small">
+                  {!user.activation && (
+                    <Button
+                      variant="contained"
+                      onClick={updateUserHandler({
+                        activation: true,
+                        email_id: user.email_id,
+                        role: user.role ? user.rle : 0,
+                      })}
+                    >
+                      Activate
+                    </Button>
+                  )}
+
+                  {user.activation && (
+                    <Button
+                      variant="contained"
+                      s
+                      color="error"
+                      onClick={updateUserHandler({
+                        activation: false,
+                        email_id: user.email_id,
+                        role: user.role,
+                      })}
+                    >
+                      De-Activate
+                    </Button>
+                  )}
+                </IconButton>
+                <IconButton edge="end" size="small">
                   {!isAuthorized({ role: user.role }) && (
                     <Button
                       variant="contained"
-                      onClick={changeRoleHandler({
+                      onClick={updateUserHandler({
                         role: 1,
                         email_id: user.email_id,
+                        activation: user.activation,
                       })}
                     >
                       Authorize
@@ -84,9 +110,10 @@ const Users = (props) => {
                       variant="contained"
                       s
                       color="error"
-                      onClick={changeRoleHandler({
+                      onClick={updateUserHandler({
                         role: 0,
                         email_id: user.email_id,
+                        activation: user.activation,
                       })}
                     >
                       Unauthorize

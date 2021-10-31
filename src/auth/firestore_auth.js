@@ -8,6 +8,7 @@ export const createUser = ({ UID }) => {
     .set({
       role: 0,
       email_id: UID,
+      activation: false,
     })
     .then((docRef) => {
       console.log("Document written with ID: ");
@@ -39,13 +40,30 @@ export const getUsersList = async () => {
     });
 };
 
-export const updateUserRole = ({ email, role }) => {
+export const updateUser = ({ email, role, activation }) => {
   return firestoreInstance
     .collection("users")
     .doc(email)
     .set({
       email_id: email,
       role: role,
+      activation: activation,
+    })
+    .then(() => {
+      alert("Updated successfully");
+    })
+    .catch((err) => {
+      alert("Update Failed: " + err);
+    });
+};
+
+export const updateUserActivation = ({ email, activation }) => {
+  return firestoreInstance
+    .collection("users")
+    .doc(email)
+    .set({
+      email_id: email,
+      activation: activation,
     })
     .then(() => {
       console.log("Role updated successfully");

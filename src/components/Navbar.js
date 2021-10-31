@@ -64,7 +64,7 @@ const NavItems = ({ openCallback }) => {
     //console.log("render navbar doc", currentUserDoc);
     maintainUserDoc(currentUserDoc);
     async function loadUserDoc() {
-      if (!currentUserDoc.role && currentUser) {
+      if ((!currentUserDoc || !currentUserDoc.role) && currentUser) {
         let userData = await getUserData(currentUser.email);
         //console.log("render navbar", userData);
         currentUserDoc.email_id = userData.email_id;
@@ -100,7 +100,7 @@ const NavItems = ({ openCallback }) => {
           <NavItem text="Archives" route="/archives">
             {/* {ul drop down} */}
           </NavItem>
-          {currentUser && isAuthorized({ role: userDoc.role }) > 0 && (
+          {currentUser && userDoc && isAuthorized({ role: userDoc.role }) && (
             <NavItem text="Users" route="/users" />
           )}
 
