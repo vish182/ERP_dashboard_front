@@ -29,9 +29,14 @@ const Users = (props) => {
     loadUsersList();
   }, []);
 
-  const updateUserHandler = ({ role, email_id, activation }) => {
+  const updateUserHandler = ({ role, email_id, activation, sendMail }) => {
     return () => {
-      updateUser({ role: role, email: email_id, activation: activation });
+      updateUser({
+        role: role,
+        email: email_id,
+        activation: activation,
+        sendMail: sendMail ? sendMail : false,
+      });
     };
   };
 
@@ -70,6 +75,7 @@ const Users = (props) => {
                         activation: true,
                         email_id: user.email_id,
                         role: user.role ? user.rle : 0,
+                        sendMail: true,
                       })}
                     >
                       Activate

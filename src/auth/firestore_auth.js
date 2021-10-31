@@ -1,4 +1,5 @@
 import { firestoreInstance } from "./firebase_auth";
+import { sendEmail } from "../api";
 
 export const createUser = ({ UID }) => {
   console.log(UID);
@@ -40,7 +41,12 @@ export const getUsersList = async () => {
     });
 };
 
-export const updateUser = ({ email, role, activation }) => {
+export const updateUser = ({ email, role, activation, sendMail = false }) => {
+  console.log("sendmai: ", sendMail);
+  console.log(":", email);
+  console.log(": ", role);
+  console.log(": ", activation);
+
   return firestoreInstance
     .collection("users")
     .doc(email)
@@ -51,6 +57,13 @@ export const updateUser = ({ email, role, activation }) => {
     })
     .then(() => {
       alert("Updated successfully");
+      if (sendMail) {
+        sendEmail({
+          toEmail: email,
+          subject: "e-Emphasys Account Activation",
+          text: "Your e-Emphasys dashboard account has been activated.",
+        });
+      }
     })
     .catch((err) => {
       alert("Update Failed: " + err);

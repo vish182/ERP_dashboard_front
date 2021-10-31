@@ -197,6 +197,31 @@ export const getHistoryCompanyList = ({ condition }) => {
     });
 };
 
+export const sendEmail = ({ toEmail, subject, text }) => {
+  //console.log(user.name, user.email, user.password, user.phone);
+
+  return fetch(`${API}/activation_mail`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      toEmail: toEmail,
+      subject: subject,
+      text: text,
+    }),
+  })
+    .then((response) => {
+      //console.log(JSON.stringify(response.json()));
+      //console.log(response);
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 export const getTimeSeriesData = ({ starttime, endtime }) => {
   return fetch(`${API}/timeseries/${starttime}/${endtime}`, {
     method: "GET",
