@@ -43,10 +43,11 @@ const Signin = () => {
     }
   };
 
-  const signUpForm = () => {
+  const signInForm = () => {
     return (
       <form>
         <div className="form-group ml-5 mt-5">
+          <h1> Sign-In</h1>
           <label className="text-muted">Email</label>
           <input
             value={email}
@@ -111,7 +112,7 @@ const Signin = () => {
     <div>
       {showError()}
       {showLoading()}
-      {signUpForm()}
+      {signInForm()}
       {redirectUser()}
       {/* {JSON.stringify(values)} */}
     </div>

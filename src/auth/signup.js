@@ -27,6 +27,11 @@ const Signup = () => {
     event.preventDefault();
     setValues({ ...values, error: false });
     try {
+      // if (email.indexOf("@emphasys.com") < 0) {
+      //   setValues({ ...values, error: "Invalid domain name" });
+      //   throw "Invalid domain email";
+      // }
+
       await signup({
         email: email,
         password: password,
@@ -51,13 +56,13 @@ const Signup = () => {
             type="text"
           />
         </div> */}
-
+        <h1> Sign-Up</h1>
         <div className="form-group">
           <label className="text-muted">Email</label>
           <input
             value={email}
             onChange={handleChange("email")}
-            className="form-control  w-50"
+            className="form-control  w-25"
             type="email"
           />
         </div>
@@ -67,10 +72,13 @@ const Signup = () => {
           <input
             value={password}
             onChange={handleChange("password")}
-            className="form-control  w-50"
+            className="form-control  w-25"
             type="password"
           />
         </div>
+        <p className="text-muted">
+          Please use a password different from you original e-Emphasys login
+        </p>
 
         {/* <div className="form-group">
           <label className="text-muted">Phone no</label>
@@ -116,11 +124,11 @@ const Signup = () => {
 
   return (
     <div>
-      {JSON.stringify(currentUser)}
+      {/* {JSON.stringify(currentUser)} */}
       {showError()}
       {showSuccess()}
       {signUpForm()}
-      {JSON.stringify(values)}
+      {/* {JSON.stringify(values)} */}
     </div>
   );
 };
