@@ -27,10 +27,10 @@ const Signup = () => {
     event.preventDefault();
     setValues({ ...values, error: false });
     try {
-      // if (email.indexOf("@emphasys.com") < 0) {
-      //   setValues({ ...values, error: "Invalid domain name" });
-      //   throw "Invalid domain email";
-      // }
+      if (email.indexOf("@emphasys.com") < 0) {
+        setValues({ ...values, error: "Invalid domain name" });
+        throw "Invalid domain email";
+      }
 
       await signup({
         email: email,
