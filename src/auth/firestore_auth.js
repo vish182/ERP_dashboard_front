@@ -13,11 +13,11 @@ export const createUser = ({ UID }) => {
     })
     .then((docRef) => {
       console.log("Document written with ID: ");
-      alert("Succes adding document: ");
+      alert("Successfully created User Profile: ");
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
-      alert("Error adding document: ", error);
+      alert("Error while Creating User Profile: ", error);
     });
 };
 
