@@ -28,7 +28,22 @@ export function AuthProvider({ children }) {
     }
 
     setCurrentUserDoc(userData);
-    return auth.signInWithEmailAndPassword(email, password);
+    // let loginObj = auth.signInWithEmailAndPassword(email, password);
+
+    return auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        // const user = userCredential.user;
+        // return user;
+        return true;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        return false;
+      });
   }
 
   function logout() {

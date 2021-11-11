@@ -33,13 +33,24 @@ const Signin = () => {
     setValues({ ...values, error: false, loading: true });
 
     try {
-      await login({ email: email, password: password });
+      let loginobj = await login({ email: email, password: password });
+
+      console.log("objlogin: ", loginobj);
+      if (!loginobj) {
+        alert("Wrong Password");
+        throw "Login Failed";
+      }
 
       history.push("/");
     } catch (err) {
-      setValues({ ...values, error: true, errorMessage: err, loading: false });
+      setValues({
+        ...values,
+        error: true,
+        errorMessage: err ? err : "failed",
+        loading: false,
+      });
 
-      alert("Failed to log in: " + err);
+      alert(`Failed to log in: ${err}`);
     }
   };
 
