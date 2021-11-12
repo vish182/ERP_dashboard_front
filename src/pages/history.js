@@ -77,7 +77,7 @@ export const History = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [queryConditions]);
+  }, [queryConditions, offset]);
 
   const nextRecords = () => {
     setOffset(offset + 25);
@@ -144,7 +144,7 @@ export const History = () => {
     }
     setFilters({ ...filters, queryConditions: conditions });
 
-    console.log("conditions: ", conditions);
+    //console.log("conditions: ", conditions);
 
     loadRecords({ pOffset: offset, conditions: conditions });
   };
@@ -272,7 +272,7 @@ export const History = () => {
 
             <div style={{ overflow: "scroll", height: "300px" }}>
               {updateList.map((item, i) => (
-                <p>{item}</p>
+                <p key={i}>{item}</p>
               ))}
             </div>
           </Box>
@@ -295,7 +295,7 @@ export const History = () => {
             if (!custList.includes(comp.Customer)) {
               custList.push(comp.Customer);
               return (
-                <option value={comp.Customer} key={i}>
+                <option key={i} value={comp.Customer} key={i}>
                   {comp.Customer}
                 </option>
               );
@@ -353,18 +353,20 @@ export const History = () => {
         </div>
       </div>
       <div div className="home-parent">
-        <div className="checkbox-parent mt-5">
-          <label style={{ fontSize: "1.5em" }}>Customers</label>
-          <Divider />
-          <div className="d-flex flex-row align-items-end justify-content-center">
-            <label>Customer</label>
-            {customerDrop()}
+        <div className="checkbox-parent">
+          <div className="checkbox">
+            <label style={{ fontSize: "1.5em" }}>Customers</label>
+            <Divider />
+            <div className="d-flex flex-row align-items-end justify-content-center">
+              <label>Customer</label>
+              {customerDrop()}
+            </div>
+            <Checkbox
+              items={companyList}
+              handleFilters={(filters) => handleCheckbox(filters)}
+              pCustomer={customerDropValue}
+            />
           </div>
-          <Checkbox
-            items={companyList}
-            handleFilters={(filters) => handleCheckbox(filters)}
-            pCustomer={customerDropValue}
-          />
         </div>
         <div className="record-main">
           <div className="next-prev" style={{ margin: "10px" }}>
@@ -372,7 +374,7 @@ export const History = () => {
               Previous
             </button>
             <div className="records-heading">
-              <h2>Archived Records</h2>
+              <h2>Solved Page no. {offset / 25}</h2>
             </div>
             <button className="next-btn" onClick={nextRecords}>
               Next

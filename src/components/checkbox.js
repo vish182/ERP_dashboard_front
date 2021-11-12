@@ -24,7 +24,7 @@ const Checkbox = ({ items, handleFilters, pCustomer }) => {
       }
 
       setChecked(newCheckedItemId);
-      console.log(newCheckedItemId);
+      //console.log(newCheckedItemId);
       handleFilters(newCheckedItemId);
     };
   };

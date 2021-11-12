@@ -2,12 +2,12 @@
 import { Box, Container, Grid } from "@material-ui/core";
 // import Budget from "../components/dashboard/Budget";
 // import LatestOrders from "../components/dashboard/LatestOrders";
-import LatestProducts from "../components/dashboard/LatestProducts";
+// import LatestProducts from "../components/dashboard/LatestProducts";
 // import Sales from "../components/dashboard/Sales";
 // import TasksProgress from "../components/dashboard/TasksProgress";
 // import TotalCustomers from "../components/dashboard/TotalCustomers";
 // import TotalProfit from "../components/dashboard/TotalProfit";
-import TrafficByDevice from "../components/dashboard/TrafficByDevice";
+import Summary from "../components/dashboard/Piechart";
 
 const Dashboard = () => (
   <>
@@ -42,7 +42,7 @@ const Dashboard = () => (
             <LatestProducts sx={{ height: "fit-content" }} />
           </Grid> */}
           <Grid item lg={4} md={6} xl={12} xs={12}>
-            <TrafficByDevice sx={{ height: "100%" }} />
+            <Summary sx={{ height: "100%" }} />
           </Grid>
 
           {/* <Grid item lg={8} md={12} xl={9} xs={12}>

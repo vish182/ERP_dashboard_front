@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { isAdmin } from "./utility";
 import { useAuth } from "../contexts/AuthContext";
 
 function AdminRoute({ component: Component, ...rest }) {
@@ -9,7 +10,7 @@ function AdminRoute({ component: Component, ...rest }) {
     <Route
       {...rest}
       render={(props) =>
-        currentUserDoc && currentUserDoc.role > 0 ? (
+        currentUserDoc && isAdmin({ role: currentUserDoc.role }) ? (
           <Component {...props} />
         ) : (
           <Redirect

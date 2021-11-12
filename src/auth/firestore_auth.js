@@ -2,7 +2,7 @@ import { firestoreInstance } from "./firebase_auth";
 import { sendEmail } from "../api";
 
 export const createUser = ({ UID }) => {
-  console.log(UID);
+  //console.log(UID);
   firestoreInstance
     .collection("users")
     .doc(UID)
@@ -12,7 +12,7 @@ export const createUser = ({ UID }) => {
       activation: false,
     })
     .then((docRef) => {
-      console.log("Document written with ID: ");
+      //console.log("Document written with ID: ");
       alert("Successfully created User Profile: ");
     })
     .catch((error) => {
@@ -42,10 +42,10 @@ export const getUsersList = async () => {
 };
 
 export const updateUser = ({ email, role, activation, sendMail = false }) => {
-  console.log("sendmai: ", sendMail);
-  console.log(":", email);
-  console.log(": ", role);
-  console.log(": ", activation);
+  //console.log("sendmai: ", sendMail);
+  //console.log(":", email);
+  //console.log(": ", role);
+  //console.log(": ", activation);
 
   return firestoreInstance
     .collection("users")
@@ -79,7 +79,7 @@ export const updateUserActivation = ({ email, activation }) => {
       activation: activation,
     })
     .then(() => {
-      console.log("Role updated successfully");
+      //console.log("Role updated successfully");
     })
     .catch((err) => {
       console.log(err);

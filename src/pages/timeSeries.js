@@ -38,9 +38,9 @@ export const Time = () => {
       .then((data) => {
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
         if (!data || data.error) {
-          console.log(data);
+          //console.log(data);
         } else {
-          console.log(data);
+          //console.log(data);
           // let temp = timeSeries;
           // temp[i] = data.count;
           setT1(data.count);
@@ -49,15 +49,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count2: ", i);
+        //console.log("count2: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT2(data.count);
@@ -68,15 +68,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count3: ", i);
+        //console.log("count3: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT3(data.count);
@@ -87,15 +87,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count4: ", i);
+        //console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT4(data.count);
@@ -106,15 +106,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count4: ", i);
+        //console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT5(data.count);
@@ -125,15 +125,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count4: ", i);
+        //console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT6(data.count);
@@ -144,15 +144,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count4: ", i);
+        //console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT7(data.count);
@@ -163,15 +163,15 @@ export const Time = () => {
       .then(() => {
         i++;
         //let a = await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("count4: ", i);
+        //console.log("count4: ", i);
         date = "2021-08-0" + i.toString();
         nextDate = "2021-08-0" + (i + 1).toString();
         getTimeSeriesData({ starttime: date, endtime: nextDate }).then(
           (data) => {
             if (!data || data.error) {
-              console.log(data);
+              //console.log(data);
             } else {
-              console.log(data);
+              //console.log(data);
               // let temp = timeSeries;
               // temp[i] = data.count;
               setT8(data.count);
@@ -198,7 +198,7 @@ export const Time = () => {
     //   );
     // });
 
-    console.log("count: ", i);
+    //console.log("count: ", i);
 
     window.scrollTo(0, 0);
   }, []);

@@ -6,7 +6,7 @@ import AVLogo from "../assets/emphasys_logo.jpg";
 import { useAuth } from "../contexts/AuthContext";
 // import forward from "../assets/forward.svg";
 // import back from "../assets/back.svg";
-import { isAuthorized } from "../auth/utility";
+import { isAdmin } from "../auth/utility";
 import { getUserData } from "../auth/firestore_auth";
 
 export const Navbar = () => {
@@ -94,13 +94,13 @@ const NavItems = ({ openCallback }) => {
       {currentUser && (
         <>
           <NavItem text="Records" route="/" />
-          <NavItem text="Dashboard" route="/dashboard" />
+          <NavItem text="Summary" route="/dashboard" />
           {/* <NavItem text="Time" route="/time" /> */}
           <NavItem text="History" route="/history" />
           <NavItem text="Archives" route="/archives">
             {/* {ul drop down} */}
           </NavItem>
-          {currentUser && userDoc && isAuthorized({ role: userDoc.role }) && (
+          {currentUser && userDoc && isAdmin({ role: userDoc.role }) && (
             <NavItem text="Users" route="/users" />
           )}
 

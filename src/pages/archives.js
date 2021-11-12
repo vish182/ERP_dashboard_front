@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Typography, Button } from "@material-ui/core";
-import { archiveJobs, getFilteredArchiveRecords } from "../api";
+import { archiveJobs, getFilteredArchiveRecords, purgeJobs } from "../api";
 //import { useAuth } from "../contexts/AuthContext";
 
 import "../styles/home.css";
@@ -34,7 +34,7 @@ export const Archives = () => {
       (data) => {
         //console.log("data: ", data);
         if (!data || data.error) {
-          console.log(data);
+          //console.log(data);
         } else {
           //console.log("on home : ", data);
           setRows(data);
@@ -56,7 +56,7 @@ export const Archives = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [queryConditions]);
+  }, [queryConditions, offset]);
 
   const nextRecords = () => {
     setOffset(offset + 25);
@@ -96,7 +96,7 @@ export const Archives = () => {
 
     setFilters({ ...filters, queryConditions: conditions });
 
-    console.log("conditions: ", conditions);
+    //console.log("conditions: ", conditions);
 
     loadRecords({ pOffset: offset, conditions: conditions });
   };
@@ -157,9 +157,20 @@ export const Archives = () => {
     });
   };
 
+  const handlePurgeArchiveDateSubmit = (e) => {
+    e.preventDefault();
+    purgeJobs({ date: date }).then((data) => {
+      if (!data || data.error) {
+        alert("error");
+      } else {
+        alert("success");
+      }
+    });
+  };
+
   const dateForm = () => {
     return (
-      <form className="mb-3 ml-3" onSubmit={handleArchiveDateSubmit}>
+      <form className="mb-3 ml-3">
         <div>
           <div className="form-group ml-2">
             <label for="archivedate">Archive Date</label>
@@ -171,7 +182,18 @@ export const Archives = () => {
             />
           </div>
         </div>
-        <button className="btn btn-outline-primary ml-2">Archive</button>
+        <button
+          className="btn btn-outline-primary ml-2"
+          onClick={handleArchiveDateSubmit}
+        >
+          Archive
+        </button>
+        <button
+          className="btn btn-outline-danger ml-2"
+          onClick={handlePurgeArchiveDateSubmit}
+        >
+          Purge
+        </button>
       </form>
     );
   };
@@ -259,7 +281,7 @@ export const Archives = () => {
           Previous
         </button>
         <div className="records-heading">
-          <h2>Archived Records</h2>
+          <h2>Archived Records Page no. {offset / 25}</h2>
         </div>
         <button className="next-btn" onClick={nextRecords}>
           Next

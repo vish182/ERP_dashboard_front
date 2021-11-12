@@ -12,7 +12,7 @@ import {
 import { getExecutionTypes } from "../../api";
 import { useEffect, useState } from "react";
 
-const TrafficByDevice = (props) => {
+const Summary = (props) => {
   const theme = useTheme();
 
   const [pieData, setPieData] = useState({
@@ -155,4 +155,4 @@ const TrafficByDevice = (props) => {
   );
 };
 
-export default TrafficByDevice;
+export default Summary;

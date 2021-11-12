@@ -35,7 +35,7 @@ const Signin = () => {
     try {
       let loginobj = await login({ email: email, password: password });
 
-      console.log("objlogin: ", loginobj);
+      //console.log("objlogin: ", loginobj);
       if (!loginobj) {
         alert("Wrong Password");
         throw "Login Failed";

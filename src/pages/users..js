@@ -12,7 +12,7 @@ import {
 import { getUsersList, updateUser } from "../auth/firestore_auth";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { isAuthorized } from "../auth/utility";
+import { isAuthorized, isAdmin } from "../auth/utility";
 
 const Users = (props) => {
   const [usersList, setUsersList] = useState([]);
@@ -22,7 +22,7 @@ const Users = (props) => {
   const loadUsersList = async () => {
     let data = await getUsersList();
     setUsersList(data);
-    console.log("array: ", data);
+    //console.log("array: ", data);
   };
 
   useEffect(() => {
@@ -49,8 +49,10 @@ const Users = (props) => {
   const getRole = ({ role }) => {
     if (role < 1) {
       return "Unauthorized";
-    } else {
+    } else if (role == 1) {
       return "Authorized";
+    } else {
+      return "Admin";
     }
   };
 
@@ -123,6 +125,35 @@ const Users = (props) => {
                       })}
                     >
                       Unauthorize
+                    </Button>
+                  )}
+                </IconButton>
+                <IconButton edge="end" size="small">
+                  {!isAdmin({ role: user.role }) && (
+                    <Button
+                      variant="contained"
+                      onClick={updateUserHandler({
+                        role: 2,
+                        email_id: user.email_id,
+                        activation: user.activation,
+                      })}
+                    >
+                      Make Admin
+                    </Button>
+                  )}
+
+                  {isAdmin({ role: user.role }) && (
+                    <Button
+                      variant="contained"
+                      s
+                      color="error"
+                      onClick={updateUserHandler({
+                        role: 1,
+                        email_id: user.email_id,
+                        activation: user.activation,
+                      })}
+                    >
+                      Remove Admin
                     </Button>
                   )}
                 </IconButton>

@@ -79,7 +79,7 @@ export const Records = () => {
   };
 
   const loadRecords = ({ pOffset, conditions }) => {
-    console.log(" load records args: ", pOffset, conditions);
+    //console.log(" load records args: ", pOffset, conditions);
     // console.log(`called load records at ${Date.now()}`);
     getFilteredRecords({ offset: pOffset, conditions: conditions }).then(
       (data) => {
@@ -87,7 +87,7 @@ export const Records = () => {
         if (!data || data.error) {
           //console.log(data);
         } else {
-          console.log("load Records : ", data);
+          //console.log("load Records : ", data);
           setRows(data);
           loadCompanies();
         }
@@ -108,7 +108,19 @@ export const Records = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [queryConditions]);
+  }, [queryConditions, offset]);
+
+  // const handleClearFilters = (e) => {
+  //   e.preventDefault();
+  //   setFilters({
+  //     jobCode: "",
+  //     customer: "",
+  //     company: "",
+  //     queryConditions: "",
+  //     updateMessage: "",
+  //     checkedCompanyList: [],
+  //   });
+  // };
 
   const nextRecords = () => {
     setOffset(offset + 25);
@@ -180,7 +192,7 @@ export const Records = () => {
 
     setFilters({ ...filters, queryConditions: conditions });
 
-    console.log("conditions before load records: ", conditions);
+    //console.log("conditions before load records: ", conditions);
 
     loadRecords({ pOffset: offset, conditions: conditions });
   };
@@ -188,7 +200,7 @@ export const Records = () => {
   const filterForm = () => {
     // onSubmit={clickSubmit}
     return (
-      <form className="mb-3" onSubmit={handleFilterSubmit}>
+      <form className="mb-3">
         {/* {JSON.stringify(filters)} */}
         <div className="form-row">
           <div className="form-group ml-2">
@@ -221,7 +233,18 @@ export const Records = () => {
             />
           </div>
         </div>
-        <button className="btn btn-outline-primary ml-2">Submit</button>
+        <button
+          className="btn btn-outline-primary ml-2"
+          onClick={handleFilterSubmit}
+        >
+          Apply Filters
+        </button>
+        {/* <button
+          className="btn btn-outline-danger ml-2"
+          onClick={handleClearFilters}
+        >
+          Clear Filters
+        </button> */}
       </form>
     );
   };
@@ -324,7 +347,7 @@ export const Records = () => {
 
             <div style={{ overflow: "scroll", height: "300px" }}>
               {updateList.map((item, i) => (
-                <p>{item}</p>
+                <p key={i}>{item}</p>
               ))}
             </div>
           </Box>
@@ -481,7 +504,7 @@ export const Records = () => {
             if (!custList.includes(comp.Customer)) {
               custList.push(comp.Customer);
               return (
-                <option value={comp.Customer} key={i}>
+                <option key={i} value={comp.Customer} key={i}>
                   {comp.Customer}
                 </option>
               );
@@ -516,18 +539,20 @@ export const Records = () => {
       </div>
 
       <div className="home-parent">
-        <div className="checkbox-parent mt-5">
-          <label style={{ fontSize: "1.5em" }}>Customers</label>
-          <Divider />
-          <div className="d-flex flex-row align-items-end justify-content-center">
-            <label>Customer</label>
-            {customerDrop()}
+        <div className="checkbox-parent">
+          <div className="checkbox">
+            <label style={{ fontSize: "1.5em" }}>Customers</label>
+            <Divider />
+            <div className="d-flex flex-row align-items-end justify-content-center">
+              <label>Customer</label>
+              {customerDrop()}
+            </div>
+            <Checkbox
+              items={companyList}
+              handleFilters={(filters) => handleCheckbox(filters)}
+              pCustomer={customerDropValue}
+            />
           </div>
-          <Checkbox
-            items={companyList}
-            handleFilters={(filters) => handleCheckbox(filters)}
-            pCustomer={customerDropValue}
-          />
         </div>
         <div className="record-main">
           <div className="next-prev" style={{ margin: "10px" }}>
@@ -535,7 +560,7 @@ export const Records = () => {
               Previous
             </button>
             <div className="record-heading">
-              <h2>Records</h2>
+              <h2>Records Page no. {offset / 25}</h2>
             </div>
             <button className="next-btn" onClick={nextRecords}>
               Next
