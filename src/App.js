@@ -2,8 +2,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Records } from "./pages/home";
 import { Archives } from "./pages/archives";
-import { Footer } from "./components/Footer";
-import { Time } from "./pages/timeSeries";
+// import { Footer } from "./components/Footer";
+// import { Time } from "./pages/timeSeries";
 import Signin from "./auth/signin";
 import Signup from "./auth/signup";
 import Dashboard from "./pages/Dashboard";
@@ -21,7 +21,7 @@ function App() {
         <PrivateRoute path="/" exact component={Records} />
         <AdminRoute path="/users" exact component={Users} />
         {/* <Route path="/products" exact component={Product}/> */}
-        <PrivateRoute path="/time" exact component={Time} />
+        {/* <PrivateRoute path="/time" exact component={Time} /> */}
         <PrivateRoute path="/archives" exact component={Archives} />
         <PrivateRoute path="/history" exact component={History} />
         <PrivateRoute path="/dashboard" exact component={Dashboard} />
