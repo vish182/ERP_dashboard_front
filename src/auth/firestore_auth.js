@@ -13,6 +13,11 @@ export const createUser = ({ UID }) => {
     })
     .then((docRef) => {
       //console.log("Document written with ID: ");
+      sendEmail({
+        toEmail: "itconsultant@e-emphasys.com",
+        subject: "New Signup Alert",
+        text: `New signup ${UID} is waiting for activation.`,
+      });
       alert("Successfully created User Profile: ");
     })
     .catch((error) => {
