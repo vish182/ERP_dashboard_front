@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./auth/private_route";
 import AdminRoute from "./auth/adminroute";
+import LoggedInRouteRoute from "./auth/loggedIn_route";
 import Users from "./pages/users.";
 import { History } from "./pages/history";
 
@@ -25,8 +26,8 @@ function App() {
         <PrivateRoute path="/archives" exact component={Archives} />
         <PrivateRoute path="/history" exact component={History} />
         <PrivateRoute path="/dashboard" exact component={Dashboard} />
-        <Route path="/signin" exact component={Signin} />
-        <Route path="/signup" exact component={Signup} />
+        <LoggedInRouteRoute path="/signin" exact component={Signin} />
+        <LoggedInRouteRoute path="/signup" exact component={Signup} />
         {/* <Footer/>  */}
       </BrowserRouter>
     </AuthProvider>
