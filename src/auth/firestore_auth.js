@@ -1,5 +1,6 @@
 import { firestoreInstance } from "./firebase_auth";
 import { sendEmail } from "../api";
+import { toSignupAlertEmail } from "../config";
 
 export const createUser = ({ UID }) => {
   //console.log(UID);
@@ -14,7 +15,7 @@ export const createUser = ({ UID }) => {
     .then((docRef) => {
       //console.log("Document written with ID: ");
       sendEmail({
-        toEmail: "itconsultant@e-emphasys.com",
+        toEmail: toSignupAlertEmail,
         subject: "New Signup Alert",
         text: `New signup ${UID} is waiting for activation.`,
       });
