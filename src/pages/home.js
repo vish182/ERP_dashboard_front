@@ -431,7 +431,7 @@ export const Records = () => {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
+              New update
             </Typography>
             <form className="mb-3" onSubmit={handleUpdateSubmit}>
               {/* {JSON.stringify(filters)}
