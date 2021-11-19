@@ -222,7 +222,7 @@ export const getHistoryCompanyList = ({ condition }) => {
     });
 };
 
-export const sendEmail = ({ toEmail, subject, text }) => {
+export const sendEmail = ({ toEmail, subject, text, cc }) => {
   //console.log(user.name, user.email, user.password, user.phone);
 
   return fetch(`${API}/activation_mail`, {
@@ -235,6 +235,7 @@ export const sendEmail = ({ toEmail, subject, text }) => {
       toEmail: toEmail,
       subject: subject,
       text: text,
+      cc: cc,
     }),
   })
     .then((response) => {

@@ -2,8 +2,10 @@ import { firestoreInstance } from "./firebase_auth";
 import { sendEmail } from "../api";
 import { toSignupAlertEmail } from "../config";
 
-export const createUser = ({ UID }) => {
-  //console.log(UID);
+export const createUser = async ({ UID }) => {
+  let emails_combined = await getAdminList();
+  //console.log("result: ", emails_combined);
+
   firestoreInstance
     .collection("users")
     .doc(UID)
@@ -18,6 +20,7 @@ export const createUser = ({ UID }) => {
         toEmail: toSignupAlertEmail,
         subject: "New Signup Alert",
         text: `New signup ${UID} is waiting for activation.`,
+        cc: emails_combined,
       });
       alert("Successfully created User Profile: ");
     })
@@ -41,6 +44,32 @@ export const getUsersList = async () => {
       });
       //console.log("arrayAssi: ", arrayAssi);
       return arrayStudents;
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
+};
+
+export const getAdminList = async () => {
+  let combined_emails = "";
+  return firestoreInstance
+    .collection("users")
+    .where("role", "==", 2)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        //console.log("admin list", " => ", doc.data().email_id);
+        combined_emails += `${doc.data().email_id}, `;
+        //arrayStudents.push(doc.data());
+      });
+      combined_emails = combined_emails.substring(
+        0,
+        combined_emails.length - 2
+      );
+      //console.log("arrayAssi: ", arrayAssi);
+      console.log("combined: ", combined_emails);
+      return combined_emails;
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);
