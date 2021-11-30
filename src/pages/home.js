@@ -553,6 +553,12 @@ export const Records = () => {
               pCustomer={customerDropValue}
             />
           </div>
+          <button
+            className="btn btn-outline-primary ml-2"
+            onClick={handleFilterSubmit}
+          >
+            Apply Filters
+          </button>
         </div>
         <div className="record-main">
           <div className="next-prev" style={{ margin: "10px" }}>
